@@ -1,19 +1,42 @@
-<!-- public/login.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JagWell Login</title>
-  <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="style.css"> <!-- if you have CSS -->
+  
+  <!-- Google Font: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"> 
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4a00e0">
+  
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="logo.png" />
 </head>
 <body>
-  <div class="container">
-    <h1>JagWell</h1>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
+
+  <div class="login-container">
+    <img src="logo.png" alt="JagWell Logo" class="logo">
+    <h1>Welcome to JagWell</h1>
+    <p class="subtitle">Sign in to your wellness dashboard</p>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Username" autocomplete="username" />
+    </div>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    </div>
     <button id="loginBtn">Login</button>
-    <p id="message"></p>    
+    <p id="message"></p>
   </div>
 
-  <script src="js/login.js"></script>
+  <script src="login.js"></script>
 </body>
 </html>

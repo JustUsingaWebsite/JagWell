@@ -1,0 +1,9 @@
+{
+  "name": "JagWell Wellness",
+  "short_name": "JagWell",
+  "start_url": "/login.html",
+  "display": "standalone",
+  "background_color": "#6a11cb",
+  "theme_color": "#4a00e0",
+  "icons": []
+}

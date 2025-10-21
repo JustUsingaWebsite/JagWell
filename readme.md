@@ -42,6 +42,7 @@ All data is stored securely in a local SQLite database, and passwords are **hash
 npm init -y
 npm install express sqlite3 cors helmet dotenv
 npm install -D nodemon
+npm install cookie-parser
 ```
 
 > 💡 Dependencies are already listed in `package.json` — no need for `npm init -y`.

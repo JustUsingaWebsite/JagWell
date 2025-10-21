@@ -2,12 +2,13 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 const router = express.Router();
 
 const dbPath = path.join(__dirname, '..', '..', 'db', 'jagwell.db');
 
+// POST /api/auth/login
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -15,30 +16,47 @@ router.post('/login', (req, res) => {
   }
 
   const db = new sqlite3.Database(dbPath);
-  // ✅ Fetch the hashed password from the DB
   db.get(`SELECT U_ID, U_Username, U_Role, Password FROM USER WHERE U_Username = ?`, [username], (err, user) => {
-    db.close(); // Always close the DB connection
-
+    db.close();
     if (err || !user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // ✅ Compare plaintext password with stored hash
     bcrypt.compare(password, user.Password, (compareErr, isMatch) => {
       if (compareErr || !isMatch) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      // ✅ Generate JWT token
       const token = jwt.sign(
         { id: user.U_ID, username: user.U_Username, role: user.U_Role },
         process.env.JWT_SECRET,
         { expiresIn: '1d' }
       );
 
-      res.json({ token, role: user.U_Role });
+      // ✅ Send token in httpOnly cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // true in prod (HTTPS)
+        sameSite: 'lax',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+      });
+
+      // Send role so client can redirect
+      res.json({ role: user.U_Role });
     });
   });
+});
+
+// POST /api/auth/logout
+router.post('/logout', (req, res) => {
+  // Clear cookie with SAME options as when it was set
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/' // important!
+  });
+  res.redirect('/login.html');
 });
 
 module.exports = router;
