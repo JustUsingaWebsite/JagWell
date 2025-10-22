@@ -1,5 +1,5 @@
 # Jagwell - Wellness App 🌿  
-<img src="pictures/logo.png" alt="Stoway Logo" width="120" align = "left" style="margin-right:15px"/> 
+<img src="./public/pictures/logo.png" alt="Stoway Logo" width="120" align = "left" style="margin-right:15px"/> 
 
 <div style="display: flex; flex-direction: column; gap: 2px;">
 <p> <strong>Jagwell Wellness App.</strong> A lightweight, secure wellness tracking application built with Node.js, Express, and SQLite. Designed to help users log and monitor their daily wellness habits—mindfully and privately.. Please consider going to the <a href="https://github.com/JustUsingaWebsite/JagWell/releases">latest release</a> and downloading it there if you want a view at a basic set up.</p>
