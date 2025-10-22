@@ -39,13 +39,19 @@ All data is stored securely in a local SQLite database, and passwords are **hash
 
 ### 1. Clone & Install
 ```bash
+npm install
+```
+> 💡 Dependencies are already listed in `package.json` — no need for `npm init -y`.
+
+### 1.5 Manual install
+```bash
 npm init -y
 npm install express sqlite3 cors helmet dotenv
 npm install -D nodemon
 npm install cookie-parser
 ```
+> 💡 This is only if when you ran `npm install` and it did not download the dependencies
 
-> 💡 Dependencies are already listed in `package.json` — no need for `npm init -y`.
 
 ### 2. Set Up the Database
 Run this **once** to create the database and tables:
