@@ -1,15 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Admin Dashboard - JagWell</title>
-  <link rel="stylesheet" href="css/style.css"> <!-- if you have CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="icon" href="pictures/logo.png" />
 </head>
 <body>
-  <h1>Admin Dashboard</h1>
-  <p>Welcome, Ms. Borland!</p>
-  <p>You can manage all records here.</p>
-  <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
-  <button type="submit">Logout</button>
-</form>
+  <div class="dashboard-container">
+    <div class="header">
+      <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+      <h1>Admin Dashboard</h1>
+      <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+        <button type="submit" class="logout-btn">Logout</button>
+      </form>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+      <ul>
+        <li><a href="#users">Users</a></li>
+        <li><a href="#reports">Reports</a></li>
+        <li><a href="#alerts">Alerts</a></li>
+      </ul>
+    </nav>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">24</div>
+        <div class="stat-label">Online Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">147</div>
+        <div class="stat-label">Total Reports</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">8</div>
+        <div class="stat-label">New Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">12</div>
+        <div class="stat-label">Critical Alerts</div>
+      </div>
+    </div>
+
+    <div class="trends-section">
+      <h2 class="trend-title">Recent Activity</h2>
+      <div class="trend-item">
+        <span class="trend-label">Dr. Jones logged in</span>
+        <span class="trend-value">10:30 AM</span>
+      </div>
+      <div class="trend-item">
+        <span class="trend-label">Student ID 123 submitted wellness data</span>
+        <span class="trend-value">9:45 AM</span>
+      </div>
+      <div class="trend-item">
+        <span class="trend-label">New user registered</span>
+        <span class="trend-value">8:15 AM</span>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

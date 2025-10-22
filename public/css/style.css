@@ -1,0 +1,181 @@
+/* public/css/style.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url('../pictures/background.svg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Extra height for mobile scroll-hiding */
+body::before {
+  content: '';
+  display: block;
+  height: 100vh;
+  margin-top: -100vh;
+}
+
+/* Animate background diagonally down-right (135°) */
+body {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  color: #333;
+  background: url('../pictures/background.svg') no-repeat center center fixed;
+  background-size: cover;
+
+  /* Default animation: 135° down-right */
+  animation: diagonalScroll 20s linear infinite;
+}
+
+/* Keyframe for diagonal scroll (135° = down-right) */
+@keyframes diagonalScroll {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 25% 25%;
+  }
+  50% {
+    background-position: 50% 50%;
+  }
+  75% {
+    background-position: 75% 75%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Mobile Portrait: Make sure animation feels diagonal */
+@media (max-width: 768px) and (orientation: portrait) {
+  body {
+    transform: scale(1.02); /* Slight zoom to fill screen */
+    transform-origin: center;
+  }
+}
+
+/* Mobile Landscape: Adjust if needed */
+@media (max-width: 768px) and (orientation: landscape) {
+  body {
+    transform: scale(1.02); /* Slight zoom to fill screen */
+    transform-origin: center;
+  }
+}
+
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  color: #333;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0 auto 24px;
+  display: block;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #4a00e0;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #8e2de2;
+  box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.2);
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.95;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#message {
+  margin-top: 16px;
+  font-size: 14px;
+  color: #e74c3c;
+  min-height: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  input, button {
+    padding: 12px;
+  }
+}
