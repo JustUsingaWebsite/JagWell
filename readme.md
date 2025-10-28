@@ -79,7 +79,7 @@ JWT_SECRET=jagwell-secret-2025-do-not-use-in-prod
 
 ### 5. Launch the App!
 ```bash
-npx nodemon src/app.js
+npm run dev
 ```
 Visit: 👉 [http://localhost:3000](http://localhost:3000)
 
