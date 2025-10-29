@@ -15,22 +15,20 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="login-container">
+      <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+      <h1>Welcome to JagWell</h1>
+      <p class="subtitle">Sign in to your wellness dashboard</p>
 
-  <div class="login-container">
-    <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
-    <h1>Welcome to JagWell</h1>
-    <p class="subtitle">Sign in to your wellness dashboard</p>
-
-    <div class="input-group">
-      <input type="text" id="username" placeholder="Username" autocomplete="username" />
+      <div class="input-group">
+        <input type="text" id="username" placeholder="Username" autocomplete="username" />
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+      </div>
+      <button id="loginBtn">Login</button>
+      <p id="message"></p>
     </div>
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-    </div>
-    <button id="loginBtn">Login</button>
-    <p id="message"></p>
-  </div>
-
   <script src="js/login.js"></script>
 </body>
 </html>

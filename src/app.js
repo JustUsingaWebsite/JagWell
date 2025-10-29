@@ -40,15 +40,31 @@ app.use('/api/wellness', authenticateToken, require('./routes/wellness'));
 
 // 🔐 PROTECTED DASHBOARD ROUTES
 app.get('/admin-dashboard', authenticateToken, authorizeRoles('Admin'), (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'admin-dashboard.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'admin', 'admin-dashboard.html'));
 });
 
 app.get('/doctor-dashboard', authenticateToken, authorizeRoles('Doctor'), (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'doctor-dashboard.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'doctor', 'doctor-dashboard.html'));
 });
 
+// Student Home
 app.get('/student-dashboard', authenticateToken, authorizeRoles('Student'), (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'student-dashboard.html'));
+  res.sendFile(path.join(__dirname, '..', 'views', 'student', 'student-home.html'));
+});
+
+// Student Log
+app.get('/student-log', authenticateToken, authorizeRoles('Student'), (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'student', 'student-log.html'));
+});
+
+// Student Trends
+app.get('/student-trends', authenticateToken, authorizeRoles('Student'), (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'student', 'student-trends.html'));
+});
+
+// Student Profile
+app.get('/student-profile', authenticateToken, authorizeRoles('Student'), (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'views', 'student', 'student-profile.html'));
 });
 
 // Redirect root to login

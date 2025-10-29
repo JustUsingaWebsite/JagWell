@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Log Wellness - JagWell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="icon" href="pictures/logo.png" />
+</head>
+<body>
+    <div class="dashboard-container">
+      <div class="header">
+        <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>Log Your Wellness</h1>
+        <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+
+      <!-- Top Navigation Bar -->
+      <nav class="top-nav">
+        <ul>
+          <li><a href="student-dashboard">Home</a></li>
+          <li><a href="student-trends">View Trends</a></li>
+          <li><a href="student-profile">Profile</a></li>
+        </ul>
+      </nav>
+
+      <div class="form-section">
+        <h2 class="form-title">Log Your Daily Wellness</h2>
+        <form id="wellnessForm">
+          <div class="form-group">
+            <label for="heartRate">Heart Rate (bpm)</label>
+            <input type="number" id="heartRate" step="0.1" placeholder="e.g., 72.5" required>
+          </div>
+          <div class="form-group">
+            <label for="temperature">Temperature (°F)</label>
+            <input type="number" id="temperature" step="0.1" placeholder="e.g., 98.6" required>
+          </div>
+          <div class="form-group">
+            <label for="sleepHours">Sleep Hours</label>
+            <input type="number" id="sleepHours" step="0.5" placeholder="e.g., 7.5" required>
+          </div>
+          <div class="form-group">
+            <label for="studyHours">Study Hours</label>
+            <input type="number" id="studyHours" step="0.5" placeholder="e.g., 4.0" required>
+          </div>
+          <div class="form-group">
+            <label for="exerciseMinutes">Exercise Minutes</label>
+            <input type="number" id="exerciseMinutes" placeholder="e.g., 30" required>
+          </div>
+          <div class="form-group">
+            <label for="mood">Mood</label>
+            <select id="mood" required>
+              <option value="">-- Select --</option>
+              <option value="Happy">😊 Happy</option>
+              <option value="Stressed">😫 Stressed</option>
+              <option value="Tired">😴 Tired</option>
+              <option value="Anxious">😰 Anxious</option>
+              <option value="Calm">😌 Calm</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="complaint">Complaint (optional)</label>
+            <input type="text" id="complaint" placeholder="e.g., Headache">
+          </div>
+          <button type="submit" class="submit-btn">Submit Wellness Data</button>
+        </form>
+      </div>
+
+      <div class="trends-section">
+        <h2 class="trend-title">Your Recent Entries</h2>
+        <div class="trend-item">
+          <span class="trend-label">Yesterday: Heart Rate</span>
+          <span class="trend-value">72.5 bpm</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-label">Yesterday: Sleep</span>
+          <span class="trend-value">7.5 hours</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-label">Last Week: Avg. Mood</span>
+          <span class="trend-value">🙂 Happy</span>
+        </div>
+      </div>
+    </div>
+  <script>
+    document.getElementById('wellnessForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Session expired. Please log in again.');
+        window.location.href = '/login.html';
+        return;
+      }
+
+      const data = {
+        Heart_Rate: parseFloat(document.getElementById('heartRate').value),
+        Temperature: parseFloat(document.getElementById('temperature').value),
+        Sleep_Hours: parseFloat(document.getElementById('sleepHours').value),
+        Study_Hours: parseFloat(document.getElementById('studyHours').value),
+        Exercise_Minutes: parseInt(document.getElementById('exerciseMinutes').value),
+        Mood: document.getElementById('mood').value,
+        Complaint: document.getElementById('complaint').value || ''
+      };
+
+      try {
+        const res = await fetch('/api/wellness', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          alert('✅ Wellness data saved!');
+          document.getElementById('wellnessForm').reset();
+        } else {
+          alert(`❌ Error: ${result.error || 'Unknown error'}`);
+        }
+      } catch (err) {
+        alert('❌ Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

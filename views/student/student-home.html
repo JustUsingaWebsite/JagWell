@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Student Home - JagWell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="icon" href="pictures/logo.png" />
+</head>
+<body>
+    <div class="dashboard-container">
+      <div class="header">
+        <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>Student Home</h1>
+        <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+
+      <!-- Top Navigation Bar -->
+      <nav class="top-nav">
+        <ul>
+          <li><a href="student-log">Log Data</a></li>
+          <li><a href="student-trends">View Trends</a></li>
+          <li><a href="student-profile">Profile</a></li>
+        </ul>
+      </nav>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">72.5</div>
+          <div class="stat-label">Avg. Heart Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">7.5</div>
+          <div class="stat-label">Avg. Sleep Hours</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">😊</div>
+          <div class="stat-label">Last Mood</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Entries This Week</div>
+        </div>
+      </div>
+
+      <div class="trends-section">
+        <h2 class="trend-title">Quick Stats</h2>
+        <div class="trend-item">
+          <span class="trend-label">Last Entry</span>
+          <span class="trend-value">Yesterday, 9:45 AM</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-label">Most Common Complaint</span>
+          <span class="trend-value">Headache</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-label">Avg. Study Hours</span>
+          <span class="trend-value">4.0 hrs/day</span>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

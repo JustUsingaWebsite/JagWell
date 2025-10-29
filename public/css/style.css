@@ -43,6 +43,7 @@ body {
   animation: diagonalScroll 20s linear infinite;
 }
 
+
 /* Keyframe for diagonal scroll (135° = down-right) */
 @keyframes diagonalScroll {
   0% {
