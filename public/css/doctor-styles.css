@@ -347,6 +347,38 @@ input:focus, select:focus, textarea:focus {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Mobile responsive table styling */
+@media (max-width: 768px) {
+  .trends-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* For iOS smooth scrolling */
+  }
+
+  .table {
+    min-width: 600px; /* Ensure table has minimum width to allow scrolling */
+    display: table;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  /* For very small screens */
+  @media (max-width: 480px) {
+    .table th,
+    .table td {
+      padding: 6px 4px;
+      font-size: 12px;
+    }
+
+    .table th {
+      padding: 8px 4px;
+    }
+  }
+}
+
 /* Status badges */
 .status-badge {
   display: inline-block;
