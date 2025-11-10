@@ -19,7 +19,7 @@ JagWell supports **three user roles**—each with their own dashboard and permis
 
 All data is stored securely in a local SQLite database, and passwords are **hashed with bcrypt**.
 
----
+--- 
 
 ## 🛠️ Tech Stack
 
@@ -94,21 +94,18 @@ You’ll be redirected to your role-specific dashboard!
 ## 🗂️ Project Structure
 
 ```
-Stoway/
-├── .env
-├── jagwell.sql                 # Database schema
-├── package.json
-├── public/                     # HTML, CSS, JS (login, dashboards)
-├── scripts/
-│   └── create-user.js          # Seed admin user
-├── src/
-│   ├── app.js                  # Main server
-│   ├── middleware/auth.js      # JWT auth
-│   └── routes/
-│       ├── auth.js             # Login endpoint
-│       └── wellness.js         # Log wellness data
-└── db/
-    └── jagwell.db              # Your SQLite database
+JagWell/
+│
+├── public/                 → static files (login.html, CSS, JS, images)
+├── views/                  → protected HTML dashboards (served via routes)
+│
+└── src/
+    └── App/
+        ├── app.js          → main Express app (entry point)
+        ├── Student-Routes/ → all /student-* routes
+        ├── Doctor-Routes/  → all /doctor-* routes
+        ├── Admin-Routes/   → all /admin-* routes
+        └── API-Routes/     → /api/auth, /api/wellness
 ```
 
 ---
@@ -138,7 +135,3 @@ We’re planning to add:
 
 > 💚 **Built with care for student wellness at Jaguar High.**  
 > Made by Rosal & team — because your health matters. 🌿
-
---- 
-
-Let me know if you'd like a **dark-mode-friendly version**, **badge icons** (build status, license), or a **one-click deploy button**!

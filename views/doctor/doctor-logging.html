@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Doctor - Logging</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/doctor-styles.css">
+  <link rel="icon" href="/pictures/logo.png" />
+</head>
+<body>
+    <div class="dashboard-container">
+      <div class="header">
+        <img src="/pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>Doctor - Logging</h1>
+        <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+
+      <!-- Top Navigation Bar -->
+      <nav class="top-nav">
+        <ul>
+          <li><a href="/doctor-dashboard">Dashboard</a></li>
+          <li><a href="/doctor-patients">Patients</a></li>
+          <li><a href="/doctor-stats">Stats</a></li>
+        </ul>
+      </nav>
+
+      <div class="tabs">
+          <button class="tab active" data-tab="new-patient">New Patient</button>
+          <button class="tab" data-tab="wellness-record">Wellness Record</button>
+          <button class="tab" data-tab="treatment">Treatment</button>
+          <button class="tab" data-tab="record-treatment">Record Treatment</button>
+      </div>
+
+      <!-- New Patient Form -->
+      <div class="tab-content active" id="new-patient-content">
+        <div class="form-section">
+          <h2 class="form-title">New Patient Registration</h2>
+          <form id="newPatientForm">
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Patient Information</h3>
+                  
+                  <div class="form-group">
+                      <label for="firstName">First Name</label>
+                      <input type="text" id="firstName" required>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="lastName">Last Name</label>
+                      <input type="text" id="lastName" required>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="patientEmail">Email</label>
+                      <input type="email" id="patientEmail">
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="patientPhone">Phone</label>
+                      <input type="tel" id="patientPhone">
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" min="0" max="120">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob">
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="sex">Sex</label>
+                        <select id="sex">
+                            <option value="">-- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="ethnicity">Ethnicity</label>
+                        <input type="text" id="ethnicity">
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Medical Information</h3>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="bloodType">Blood Type</label>
+                        <select id="bloodType">
+                            <option value="">-- Select --</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="status">Patient Status</label>
+                        <select id="status" required>
+                            <option value="Student">Student</option>
+                            <option value="Staff">Staff</option>
+                        </select>
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-group">
+                  <label for="notes">Additional Notes</label>
+                  <textarea id="notes" rows="4" style="min-height: 100px;"></textarea>
+              </div>
+              
+              <button type="submit" class="submit-btn">Register Patient</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Wellness Record Form -->
+      <div class="tab-content" id="wellness-record-content">
+        <div class="form-section">
+          <h2 class="form-title">Log Wellness Record</h2>
+          <form id="wellnessRecordForm">
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Patient Information</h3>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="patientId">Patient ID</label>
+                        <input type="text" id="patientId" placeholder="Enter Patient ID" required>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Physical Measurements</h3>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="heartRate">Heart Rate (bpm)</label>
+                        <input type="number" id="heartRate" min="0" max="300">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="temperature">Temperature (°F)</label>
+                        <input type="number" id="temperature" step="0.1" min="90" max="110">
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="pulse">Pulse (bpm)</label>
+                        <input type="number" id="pulse" min="0" max="300">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="bloodPressure">Blood Pressure</label>
+                        <input type="text" id="bloodPressure" placeholder="e.g., 120/80">
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Student-Reported Data</h3>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="sleepHours">Sleep Hours</label>
+                        <input type="number" id="sleepHours" step="0.5" min="0" max="24">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="studyHours">Study Hours</label>
+                        <input type="number" id="studyHours" step="0.5" min="0" max="24">
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="exerciseMinutes">Exercise Minutes</label>
+                        <input type="number" id="exerciseMinutes" min="0">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="mood">Mood</label>
+                        <select id="mood">
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Poor">Poor</option>
+                            <option value="Very Poor">Very Poor</option>
+                        </select>
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Doctor Notes</h3>
+                  
+                  <div class="form-group">
+                      <label for="complaint">Patient Complaint</label>
+                      <input type="text" id="complaint">
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="followUpDate">Follow-up Date</label>
+                        <input type="date" id="followUpDate">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="referralTo">Referral To</label>
+                        <input type="text" id="referralTo">
+                    </div>
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="programCode">Program Code</label>
+                        <input type="text" id="programCode">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="doctorId">Doctor ID</label>
+                        <input type="text" id="doctorId" placeholder="Your ID" required>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="comments">Additional Comments</label>
+                      <textarea id="comments" rows="3" style="min-height: 80px;"></textarea>
+                  </div>
+              </div>
+              
+              <button type="submit" class="submit-btn">Log Wellness Record</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Treatment Form -->
+      <div class="tab-content" id="treatment-content">
+        <div class="form-section">
+          <h2 class="form-title">Add New Treatment</h2>
+          <form id="treatmentForm">
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Treatment Information</h3>
+                  
+                  <div class="form-group">
+                      <label for="treatmentDescription">Treatment Description</label>
+                      <textarea id="treatmentDescription" rows="3" required placeholder="Describe the treatment in detail" style="min-height: 80px;"></textarea>
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="treatmentCategory">Treatment Category</label>
+                      <select id="treatmentCategory">
+                          <option value="Medication">Medication</option>
+                          <option value="Therapy">Therapy</option>
+                          <option value="Procedure">Procedure</option>
+                          <option value="Recommendation">Recommendation</option>
+                          <option value="Referral">Referral</option>
+                      </select>
+                  </div>
+              </div>
+              
+              <div class="form-group">
+                  <label for="treatmentNotes">Additional Notes</label>
+                  <textarea id="treatmentNotes" rows="3" style="min-height: 80px;"></textarea>
+              </div>
+              
+              <button type="submit" class="submit-btn">Add Treatment</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Record Treatment Form -->
+      <div class="tab-content" id="record-treatment-content">
+        <div class="form-section">
+          <h2 class="form-title">Apply Treatment to Record</h2>
+          <form id="recordTreatmentForm">
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Record Information</h3>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="recordId">Wellness Record ID</label>
+                        <input type="text" id="recordId" placeholder="Enter Record ID" required>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="treatmentId">Treatment ID</label>
+                        <input type="text" id="treatmentId" placeholder="Enter Treatment ID" required>
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-section" style="padding: 15px; margin-top: 15px;">
+                  <h3 style="font-size: 18px; font-weight: 500; color: #4a00e0; margin-bottom: 15px;">Treatment Details</h3>
+                  
+                  <div class="form-group">
+                      <label for="treatmentDetails">Treatment Details</label>
+                      <textarea id="treatmentDetails" rows="3" placeholder="Specify dosage, duration, instructions, etc." style="min-height: 80px;"></textarea>
+                  </div>
+                  
+                  <div style="display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                  </div>
+              </div>
+              
+              <div class="form-group">
+                  <label for="treatmentOutcome">Expected Outcome</label>
+                  <textarea id="treatmentOutcome" rows="2" style="min-height: 60px;"></textarea>
+              </div>
+              
+              <button type="submit" class="submit-btn">Apply Treatment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+        
+        // Form submission handling
+        document.getElementById('newPatientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Patient registered successfully!');
+        });
+        
+        document.getElementById('wellnessRecordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Wellness record logged successfully!');
+        });
+        
+        document.getElementById('treatmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Treatment added successfully!');
+        });
+        
+        document.getElementById('recordTreatmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Treatment applied to record successfully!');
+        });
+    </script>
+</body>
+</html>

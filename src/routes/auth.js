@@ -19,11 +19,13 @@ router.post('/login', (req, res) => {
   db.get(`SELECT U_ID, U_Username, U_Role, Password FROM USER WHERE U_Username = ?`, [username], (err, user) => {
     db.close();
     if (err || !user) {
+      console.log(err)
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     bcrypt.compare(password, user.Password, (compareErr, isMatch) => {
       if (compareErr || !isMatch) {
+        console.log("invalid password hash: " + compareErr)
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 

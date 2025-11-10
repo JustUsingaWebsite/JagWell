@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Doctor - Statistics & Trends</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/doctor-styles.css">
+  <link rel="icon" href="/pictures/logo.png" />
+</head>
+<body>
+    <div class="dashboard-container">
+      <div class="header">
+        <img src="/pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>Doctor - Statistics & Trends</h1>
+        <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+
+      <!-- Top Navigation Bar -->
+      <nav class="top-nav">
+        <ul>
+          <li><a href="/doctor-dashboard">Dashboard</a></li>
+          <li><a href="/doctor-patients">Patients</a></li>
+          <li><a href="/doctor-logging">Logging</a></li>
+        </ul>
+      </nav>
+
+        <div class="form-section" style="padding: 15px; margin-bottom: 15px;">
+            <div style="display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; justify-content: center;">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label for="timePeriod" style="font-size: 14px; color: #333;">Time Period:</label>
+                    <select id="timePeriod" style="min-width: 130px;">
+                        <option>Last 7 Days</option>
+                        <option selected>Last 30 Days</option>
+                        <option>Last 90 Days</option>
+                        <option>Last Year</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label for="patientType" style="font-size: 14px; color: #333;">Patient Type:</label>
+                    <select id="patientType" style="min-width: 130px;">
+                        <option>All</option>
+                        <option>Student</option>
+                        <option>Staff</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label for="dateRange" style="font-size: 14px; color: #333;">Date Range:</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="date" id="dateRangeStart" value="2025-10-01" style="padding: 8px; border-radius: 12px; border: 2px solid #e0e0e0; font-size: 14px;">
+                        <span style="color: #333;">to</span>
+                        <input type="date" id="dateRangeEnd" value="2025-11-10" style="padding: 8px; border-radius: 12px; border: 2px solid #e0e0e0; font-size: 14px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">142</div>
+                <div class="stat-label">Total Patients</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">87</div>
+                <div class="stat-label">Active Patients</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">34</div>
+                <div class="stat-label">New Records</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">6.2</div>
+                <div class="stat-label">Avg. Sleep Hours</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">72 bpm</div>
+                <div class="stat-label">Avg. Heart Rate</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">High-Risk Patients</div>
+            </div>
+        </div>
+
+        <div class="trends-section">
+            <h2 class="trend-title">Wellness Trends Over Time</h2>
+            <div style="display: flex; justify-content: center; align-items: end; gap: 8px; height: 200px; margin-top: 20px;">
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 100px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">6.8</div>
+                    <span style="font-size: 12px; color: #666;">Mon</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 120px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">7.2</div>
+                    <span style="font-size: 12px; color: #666;">Tue</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 140px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">7.5</div>
+                    <span style="font-size: 12px; color: #666;">Wed</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 90px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">6.5</div>
+                    <span style="font-size: 12px; color: #666;">Thu</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 80px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">6.2</div>
+                    <span style="font-size: 12px; color: #666;">Fri</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 110px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">6.9</div>
+                    <span style="font-size: 12px; color: #666;">Sat</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 130px; background: #3498db; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">7.3</div>
+                    <span style="font-size: 12px; color: #666;">Sun</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="trends-section">
+            <h2 class="trend-title">Patient Condition Distribution</h2>
+            <div style="display: flex; justify-content: center; align-items: end; gap: 8px; height: 200px; margin-top: 20px;">
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 200px; background: #2ecc71; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">45%</div>
+                    <span style="font-size: 12px; color: #666;">Healthy</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 150px; background: #f1c40f; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">30%</div>
+                    <span style="font-size: 12px; color: #666;">At Risk</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 100px; background: #e74c3c; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">15%</div>
+                    <span style="font-size: 12px; color: #666;">Needs Care</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="width: 100%; height: 50px; background: #9b59b6; border-radius: 5px 5px 0 0; display: flex; align-items: end; justify-content: center; color: white; font-weight: bold; margin-bottom: 5px;">10%</div>
+                    <span style="font-size: 12px; color: #666;">Critical</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="trends-section">
+            <h2 class="trend-title">Statistical Comparison</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Current Avg</th>
+                        <th>Previous Avg</th>
+                        <th>Variance</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sleep Hours</td>
+                        <td>6.2</td>
+                        <td>6.5</td>
+                        <td>-0.3</td>
+                        <td style="color: #e74c3c;">↓</td>
+                    </tr>
+                    <tr>
+                        <td>Study Hours</td>
+                        <td>7.8</td>
+                        <td>7.2</td>
+                        <td>+0.6</td>
+                        <td style="color: #27ae60;">↑</td>
+                    </tr>
+                    <tr>
+                        <td>Heart Rate</td>
+                        <td>72 bpm</td>
+                        <td>74 bpm</td>
+                        <td>-2 bpm</td>
+                        <td style="color: #27ae60;">↓</td>
+                    </tr>
+                    <tr>
+                        <td>Exercise Minutes</td>
+                        <td>35 min</td>
+                        <td>42 min</td>
+                        <td>-7 min</td>
+                        <td style="color: #e74c3c;">↓</td>
+                    </tr>
+                    <tr>
+                        <td>Clinic Visits</td>
+                        <td>1.2/mo</td>
+                        <td>1.5/mo</td>
+                        <td>-0.3/mo</td>
+                        <td style="color: #e74c3c;">↓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="trends-section">
+            <h2 class="trend-title">Health Trend Analysis</h2>
+            <div style="padding: 10px 15px; line-height: 1.7;">
+                <p>Based on the collected wellness data over the past 30 days, we can observe several trends in the patient population:</p>
+                
+                <div style="background: #e8f4fc; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #3498db;">
+                    <strong>Key Finding:</strong> There has been a noticeable decrease in average sleep hours among patients, which correlates with a slight increase in average study hours. This suggests that academic pressure may be impacting patient rest patterns.
+                </div>
+                
+                <p>The overall wellness metrics show a mixed trend. While heart rate has improved (decreased), the reduction in sleep hours and exercise minutes is concerning. We recommend focusing on sleep hygiene education and promoting regular exercise as part of the wellness program.</p>
+                
+                <p>Patients in the "At Risk" and "Needs Care" categories should be prioritized for follow-up appointments. The high-risk patient count has decreased slightly, which is a positive indicator of intervention effectiveness.</p>
+                
+                <p>Seasonal patterns may be emerging as we approach the end of the semester. Stress-related wellness indicators are worth monitoring closely in the coming weeks.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

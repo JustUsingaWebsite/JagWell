@@ -1,65 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <title>Doctor Dashboard - JagWell</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="icon" href="pictures/logo.png" />
+  <link rel="stylesheet" href="/css/doctor-styles.css">
+  <link rel="icon" href="/pictures/logo.png" />
 </head>
 <body>
-  <div class="dashboard-container">
-    <div class="header">
-      <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
-      <h1>Doctor Dashboard</h1>
-      <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
-        <button type="submit" class="logout-btn">Logout</button>
-      </form>
-    </div>
+    <div class="dashboard-container">
+      <div class="header">
+        <img src="/pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>Doctor Dashboard</h1>
+        <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
 
-    <!-- Top Navigation Bar -->
-    <nav class="top-nav">
-      <ul>
-        <li><a href="#trends">Trends</a></li>
-        <li><a href="#patients">Patients</a></li>
-        <li><a href="#stats">Stats</a></li>
-      </ul>
-    </nav>
+      <!-- Top Navigation Bar -->
+      <nav class="top-nav">
+        <ul>
+          <li><a href="/doctor-patients">Patients</a></li>
+          <li><a href="/doctor-logging">Logging</a></li>
+          <li><a href="/doctor-stats">Stats</a></li>
+        </ul>
+      </nav>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">72.5</div>
-        <div class="stat-label">Avg. Heart Rate</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">72.5 bpm</div>
+          <div class="stat-label">Avg. Heart Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">7.2 hrs</div>
+          <div class="stat-label">Avg. Sleep Hours</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">68%</div>
+          <div class="stat-label">Students Reporting "Happy"</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">12</div>
+          <div class="stat-label">High Stress Cases</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-value">7.2</div>
-        <div class="stat-label">Avg. Sleep Hours</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">68%</div>
-        <div class="stat-label">Students Reporting "Happy"</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">12</div>
-        <div class="stat-label">High Stress Cases</div>
+
+      <div class="trends-section">
+        <h2 class="trend-title">Anonymous Wellness Trends</h2>
+        <div class="trend-item">
+          <span class="trend-label">Most common complaint</span>
+          <span class="trend-value">Headache</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-label">Avg. Study Hours</span>
+          <span class="trend-value">4.5 hrs/day</span>
+        </div>
+        <div class="trend-item">
+          <span class="trend-label">Avg. Exercise Minutes</span>
+          <span class="trend-value">30 mins/day</span>
+        </div>
       </div>
     </div>
-
-    <div class="trends-section">
-      <h2 class="trend-title">Anonymous Wellness Trends</h2>
-      <div class="trend-item">
-        <span class="trend-label">Most common complaint</span>
-        <span class="trend-value">Headache</span>
-      </div>
-      <div class="trend-item">
-        <span class="trend-label">Avg. Study Hours</span>
-        <span class="trend-value">4.5 hrs/day</span>
-      </div>
-      <div class="trend-item">
-        <span class="trend-label">Avg. Exercise Minutes</span>
-        <span class="trend-value">30 mins/day</span>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
