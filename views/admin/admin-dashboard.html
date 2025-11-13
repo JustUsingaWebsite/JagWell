@@ -2,17 +2,18 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard - JagWell</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="icon" href="pictures/logo.png" />
+  <link rel="stylesheet" href="/css/doctor-styles.css">
+  <link rel="icon" href="/pictures/logo.png" />
 </head>
 <body>
   <div class="dashboard-container">
     <div class="header">
-      <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+      <img src="/pictures/logo.png" alt="JagWell Logo" class="logo">
       <h1>Admin Dashboard</h1>
-      <form id="logoutForm" action="/api/auth/logout" method="POST" style="display:inline;">
+      <form id="logoutForm" action="/api/auth/logout" method="POST" class="logout-form">
         <button type="submit" class="logout-btn">Logout</button>
       </form>
     </div>
@@ -20,46 +21,188 @@
     <!-- Top Navigation Bar -->
     <nav class="top-nav">
       <ul>
-        <li><a href="#users">Users</a></li>
-        <li><a href="#reports">Reports</a></li>
-        <li><a href="#alerts">Alerts</a></li>
+        <li><a href="#users">User Management</a></li>
+        <li><a href="#patients">Patient Info</a></li>
+        <li><a href="#records">Wellness Records</a></li>
+        <li><a href="#treatments">Treatments</a></li>
       </ul>
     </nav>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value">24</div>
-        <div class="stat-label">Online Users</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">147</div>
-        <div class="stat-label">Total Reports</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">8</div>
-        <div class="stat-label">New Today</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">12</div>
-        <div class="stat-label">Critical Alerts</div>
+    <!-- Tabs for Admin Functions -->
+    <div class="tabs">
+      <button class="tab active" data-tab="users">User Management</button>
+      <button class="tab" data-tab="patients">Patient Information</button>
+      <button class="tab" data-tab="records">Wellness Records</button>
+      <button class="tab" data-tab="treatments">Treatments</button>
+    </div>
+
+    <!-- User Management Tab -->
+    <div class="tab-content active" id="users-content">
+      <div class="form-section">
+        <h2 class="form-title">User Management</h2>
+        
+        <!-- Create User Form -->
+        <div class="form-section patient-info">
+          <h3 class="section-title">Create New User</h3>
+          <form id="createUserForm">
+            <div class="flex-row">
+              <div class="form-group">
+                <label for="newUsername">Username</label>
+                <input type="text" id="newUsername" required>
+              </div>
+              <div class="form-group">
+                <label for="newPassword">Password</label>
+                <input type="password" id="newPassword" required>
+              </div>
+            </div>
+            
+            <div class="flex-row">
+              <div class="form-group">
+                <label for="newRole">Role</label>
+                <select id="newRole" required>
+                  <option value="">-- Select Role --</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Doctor">Doctor</option>
+                  <option value="Student">Student</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="newFirstName">First Name</label>
+                <input type="text" id="newFirstName">
+              </div>
+            </div>
+            
+            <div class="flex-row">
+              <div class="form-group">
+                <label for="newLastName">Last Name</label>
+                <input type="text" id="newLastName">
+              </div>
+              <div class="form-group">
+                <label for="newEmail">Email</label>
+                <input type="email" id="newEmail">
+              </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Create User</button>
+          </form>
+        </div>
+
+        <!-- Users List -->
+        <div class="form-section patient-info">
+          <h3 class="section-title">Manage Existing Users</h3>
+          <div class="search-container">
+            <input type="text" id="userSearch" placeholder="Search users..." class="search-input">
+            <button id="userSearchBtn" class="submit-btn search-btn">Search</button>
+          </div>
+          
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- User data will be loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <div class="trends-section">
-      <h2 class="trend-title">Recent Activity</h2>
-      <div class="trend-item">
-        <span class="trend-label">Dr. Jones logged in</span>
-        <span class="trend-value">10:30 AM</span>
+    <!-- Patient Information Tab -->
+    <div class="tab-content" id="patients-content">
+      <div class="form-section">
+        <h2 class="form-title">Patient Information</h2>
+        
+        <div class="form-section patient-info">
+          <h3 class="section-title">Search Patients</h3>
+          <div class="search-container">
+            <input type="text" id="patientSearch" placeholder="Search patients by name or student ID..." class="search-input">
+            <button id="patientSearchBtn" class="submit-btn search-btn">Search</button>
+          </div>
+          
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Patient Name</th>
+                <th>Student ID</th>
+                <th>Status</th>
+                <th>Age</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patientsTableBody">
+              <!-- Patient data will be loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="trend-item">
-        <span class="trend-label">Student ID 123 submitted wellness data</span>
-        <span class="trend-value">9:45 AM</span>
+    </div>
+
+    <!-- Wellness Records Tab -->
+    <div class="tab-content" id="records-content">
+      <div class="form-section">
+        <h2 class="form-title">Wellness Records</h2>
+        
+        <div class="form-section patient-info">
+          <h3 class="section-title">Search Wellness Records</h3>
+          <div class="search-container">
+            <input type="text" id="recordSearch" placeholder="Search records by patient name or date..." class="search-input">
+            <button id="recordSearchBtn" class="submit-btn search-btn">Search</button>
+          </div>
+          
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Record ID</th>
+                <th>Patient Name</th>
+                <th>Date</th>
+                <th>Recorded By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="recordsTableBody">
+              <!-- Record data will be loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="trend-item">
-        <span class="trend-label">New user registered</span>
-        <span class="trend-value">8:15 AM</span>
+    </div>
+
+    <!-- Treatments Tab -->
+    <div class="tab-content" id="treatments-content">
+      <div class="form-section">
+        <h2 class="form-title">Treatment Management</h2>
+        
+        <div class="form-section treatment-info">
+          <h3 class="section-title">Available Treatments</h3>
+          <div class="search-container">
+            <input type="text" id="treatmentSearch" placeholder="Search treatments..." class="search-input">
+            <button id="treatmentSearchBtn" class="submit-btn search-btn">Search</button>
+          </div>
+          
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Treatment ID</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="treatmentsTableBody">
+              <!-- Treatment data will be loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
+
+  <script src="/js/admin/admin-dashboard.js"></script>
 </body>
 </html>

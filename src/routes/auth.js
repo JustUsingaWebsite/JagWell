@@ -61,4 +61,14 @@ router.post('/logout', (req, res) => {
   res.redirect('/login.html');
 });
 
+// GET /api/auth/me - Get current user's information
+router.get('/me', require('../middleware/auth').authenticateToken, (req, res) => {
+  // Return user information from the token
+  res.json({
+    id: req.user.id,
+    username: req.user.username,
+    role: req.user.role
+  });
+});
+
 module.exports = router;

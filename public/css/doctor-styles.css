@@ -208,6 +208,121 @@ body::before {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+/* Search Container */
+.search-container {
+  margin-bottom: 20px; /* Add space between search and filter containers */
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-btn {
+  min-width: auto;
+}
+
+/* Filter Container */
+.filter-container {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.filter-select {
+  min-width: 120px;
+}
+
+/* Form Section Enhancements */
+.patient-info {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.medical-info {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.student-info {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.doctor-notes {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.treatment-info {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.record-info {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.treatment-details {
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #4a00e0;
+  margin-bottom: 15px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.flex-row .form-group {
+  flex: 1;
+  min-width: 150px;
+}
+
+.tall-textarea {
+  min-height: 100px;
+}
+
+.medium-textarea {
+  min-height: 80px;
+}
+
+.small-textarea {
+  min-height: 60px;
+}
+
 .form-title {
   font-size: 18px;
   font-weight: 500;

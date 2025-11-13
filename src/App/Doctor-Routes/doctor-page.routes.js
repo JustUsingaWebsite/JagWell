@@ -13,6 +13,7 @@ module.exports = (app, authenticateToken, authorizeRoles, path) => {
     });
 
     app.get('/doctor-stats', authenticateToken, authorizeRoles('Doctor'), (req, res) => {
-        res.sendFile(path.join(__dirname, '..', '..', '..', 'views', 'doctor', 'doctor-stats.html'));
+        res.redirect('wip.html');
+        //res.sendFile(path.join(__dirname, '..', '..', '..', 'views', 'doctor', 'doctor-stats.html'));
     });
 }
