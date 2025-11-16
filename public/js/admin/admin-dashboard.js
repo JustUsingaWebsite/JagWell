@@ -156,12 +156,12 @@ async function loadUsers(searchTerm = '') {
 // Load patients from the API
 async function loadPatients(searchTerm = '') {
     try {
-        // For now, we'll use the doctor endpoint that lists patients
+        // Use the doctor endpoint that lists patients since it's the existing one available
         let url = '/api/doctor/patients';
         if (searchTerm) {
             url += `?search=${encodeURIComponent(searchTerm)}`;
         }
-        
+
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -201,15 +201,46 @@ function renderPatientsTable(patients) {
     patients.forEach(patient => {
         const row = document.createElement('tr');
 
-        row.innerHTML = `
-            <td>${escapeHtml(patient.name)}</td>
-            <td>${escapeHtml(patient.studentId) || 'N/A'}</td>
-            <td><span class="status-badge ${patient.status.toLowerCase()}">${escapeHtml(patient.status)}</span></td>
-            <td>${patient.age || 'N/A'}</td>
-            <td>
-                <button class="submit-btn" onclick="editPatient(${patient.patientId})" style="margin-right: 5px;">Edit</button>
-            </td>
-        `;
+        // Create and populate table cells
+        const nameCell = document.createElement('td');
+        nameCell.textContent = escapeHtml(patient.name);
+
+        const studentIdCell = document.createElement('td');
+        studentIdCell.textContent = escapeHtml(patient.studentId) || 'N/A';
+
+        const statusCell = document.createElement('td');
+        const statusBadge = document.createElement('span');
+        statusBadge.className = `status-badge ${patient.status.toLowerCase()}`;
+        statusBadge.textContent = escapeHtml(patient.status);
+        statusCell.appendChild(statusBadge);
+
+        const ageCell = document.createElement('td');
+        ageCell.textContent = patient.age || 'N/A';
+
+        const actionsCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.className = 'submit-btn';
+        editButton.textContent = 'Edit';
+        editButton.style.marginRight = '5px';
+        editButton.dataset.patientId = patient.patientId;
+
+        // Attach event listener directly to the button
+        editButton.addEventListener('click', function() {
+            const patientId = parseInt(this.dataset.patientId);
+            if (isNaN(patientId) || patientId <= 0) {
+                console.error('Invalid patient ID:', this.dataset.patientId);
+                alert('Invalid patient ID provided for editing.');
+                return;
+            }
+            editPatient(patientId);
+        });
+
+        actionsCell.appendChild(editButton);
+        row.appendChild(nameCell);
+        row.appendChild(studentIdCell);
+        row.appendChild(statusCell);
+        row.appendChild(ageCell);
+        row.appendChild(actionsCell);
 
         tableBody.appendChild(row);
     });
@@ -217,129 +248,121 @@ function renderPatientsTable(patients) {
 
 // Function to edit a patient
 async function editPatient(patientId) {
+    // Validate patientId before proceeding
+    if (!patientId || patientId <= 0) {
+        console.error('Invalid patient ID provided for editing:', patientId);
+        alert('Invalid patient ID provided for editing.');
+        return;
+    }
+
     try {
-        // Fetch existing patient data
-        // This would need a dedicated endpoint to get a single patient's data
-        // For now, we'll simulate a modal to edit patient data
-        
-        const modal = createEditPatientModal(patientId);
+        // Fetch existing patient data from the server
+        const response = await fetch(`/api/admin/patients/${patientId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to get patient: ${response.status}`);
+        }
+
+        const result = await response.json();
+        const patientData = result.patient;  // The patient data is nested in the result
+
+        // Create a modal with edit form pre-populated with patient data
+        const modal = createEditPatientModal(patientData);
         document.body.appendChild(modal);
     } catch (error) {
-        console.error('Error preparing patient edit:', error);
-        alert('Failed to prepare patient edit form.');
+        console.error('Error fetching patient for editing:', error);
+        alert('Failed to fetch patient data for editing.');
     }
 }
 
 // Function to create edit patient modal
-function createEditPatientModal(patientId) {
+function createEditPatientModal(patientData) {
     const modal = document.createElement('div');
     modal.className = 'modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    `;
 
     modal.innerHTML = `
-        <div class="modal-content" style="
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        ">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2>Edit Patient</h2>
-                <button id="closeEditPatientModal" style="
-                    background: none;
-                    border: none;
-                    font-size: 24px;
-                    cursor: pointer;
-                    padding: 5px;
-                ">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Patient: #${patientData.P_ID}</h2>
+                <button id="closeEditPatientModal" class="close-modal-btn">&times;</button>
             </div>
-            
+
             <form id="editPatientForm">
-                <input type="hidden" id="editPatientId" value="${patientId}">
-                
+                <input type="hidden" id="editPatientId" value="${patientData.P_ID}">
+
                 <div class="form-group">
                     <label for="editPatientName">Patient Name</label>
-                    <input type="text" id="editPatientName" placeholder="Patient Name">
+                    <input type="text" id="editPatientName" value="${escapeHtml(patientData.P_Name) || ''}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editPatientStudentId">Student ID</label>
-                    <input type="text" id="editPatientStudentId" placeholder="Student ID">
+                    <input type="text" id="editPatientStudentId" value="${escapeHtml(patientData.P_StudentId) || ''}">
                 </div>
-                
+
                 <div class="flex-row">
                     <div class="form-group">
                         <label for="editPatientAge">Age</label>
-                        <input type="number" id="editPatientAge" min="0" max="120">
+                        <input type="number" id="editPatientAge" value="${patientData.P_Age || ''}" min="0" max="120">
                     </div>
                     <div class="form-group">
                         <label for="editPatientDOB">Date of Birth</label>
-                        <input type="date" id="editPatientDOB">
+                        <input type="date" id="editPatientDOB" value="${patientData.P_DOB || ''}">
                     </div>
                 </div>
-                
+
                 <div class="flex-row">
                     <div class="form-group">
                         <label for="editPatientSex">Sex</label>
                         <select id="editPatientSex">
                             <option value="">-- Select --</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
+                            <option value="Male" ${patientData.P_Sex === 'Male' ? 'selected' : ''}>Male</option>
+                            <option value="Female" ${patientData.P_Sex === 'Female' ? 'selected' : ''}>Female</option>
+                            <option value="Other" ${patientData.P_Sex === 'Other' ? 'selected' : ''}>Other</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="editPatientStatus">Status</label>
                         <select id="editPatientStatus">
-                            <option value="Student">Student</option>
-                            <option value="Staff">Staff</option>
+                            <option value="Student" ${patientData.P_Status === 'Student' ? 'selected' : ''}>Student</option>
+                            <option value="Staff" ${patientData.P_Status === 'Staff' ? 'selected' : ''}>Staff</option>
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editPatientEthnicity">Ethnicity</label>
-                    <input type="text" id="editPatientEthnicity" placeholder="Ethnicity">
+                    <input type="text" id="editPatientEthnicity" value="${escapeHtml(patientData.P_Ethnicity) || ''}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editPatientPhone">Phone</label>
-                    <input type="tel" id="editPatientPhone" placeholder="Phone Number">
+                    <input type="tel" id="editPatientPhone" value="${escapeHtml(patientData.P_Phone) || ''}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editPatientBloodType">Blood Type</label>
                     <select id="editPatientBloodType">
                         <option value="">-- Select --</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
+                        <option value="A+" ${patientData.P_BloodType === 'A+' ? 'selected' : ''}>A+</option>
+                        <option value="A-" ${patientData.P_BloodType === 'A-' ? 'selected' : ''}>A-</option>
+                        <option value="B+" ${patientData.P_BloodType === 'B+' ? 'selected' : ''}>B+</option>
+                        <option value="B-" ${patientData.P_BloodType === 'B-' ? 'selected' : ''}>B-</option>
+                        <option value="AB+" ${patientData.P_BloodType === 'AB+' ? 'selected' : ''}>AB+</option>
+                        <option value="AB-" ${patientData.P_BloodType === 'AB-' ? 'selected' : ''}>AB-</option>
+                        <option value="O+" ${patientData.P_BloodType === 'O+' ? 'selected' : ''}>O+</option>
+                        <option value="O-" ${patientData.P_BloodType === 'O-' ? 'selected' : ''}>O-</option>
                     </select>
                 </div>
-                
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
+
+                <div class="form-actions">
                     <button type="submit" class="submit-btn">Save Changes</button>
-                    <button type="button" id="cancelEditPatient" class="submit-btn" style="background-color: #95a5a6;">Cancel</button>
+                    <button type="button" id="cancelEditPatient" class="submit-btn cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>
@@ -358,9 +381,6 @@ function createEditPatientModal(patientId) {
     cancelBtn.addEventListener('click', function() {
         document.body.removeChild(modal);
     });
-
-    // This would need to fetch and populate the existing patient data
-    // For now, we'll leave the fields empty
 
     return modal;
 }
@@ -465,14 +485,57 @@ function renderTreatmentsTable(treatments) {
     treatments.forEach(treatment => {
         const row = document.createElement('tr');
 
-        row.innerHTML = `
-            <td>${treatment.T_ID}</td>
-            <td>${escapeHtml(treatment.T_Description)}</td>
-            <td>
-                <button class="submit-btn" onclick="editTreatment(${treatment.T_ID})" style="margin-right: 5px;">Edit</button>
-                <button class="submit-btn" style="background-color: #e74c3c;" onclick="deleteTreatment(${treatment.T_ID}, '${escapeHtml(treatment.T_Description)}')">Delete</button>
-            </td>
-        `;
+        // Create and populate table cells
+        const idCell = document.createElement('td');
+        idCell.textContent = treatment.T_ID;
+
+        const descriptionCell = document.createElement('td');
+        descriptionCell.textContent = escapeHtml(treatment.T_Description);
+
+        const actionsCell = document.createElement('td');
+
+        // Create edit button
+        const editButton = document.createElement('button');
+        editButton.className = 'submit-btn';
+        editButton.textContent = 'Edit';
+        editButton.style.marginRight = '5px';
+        editButton.dataset.treatmentId = treatment.T_ID;
+
+        // Attach event listener directly to the edit button
+        editButton.addEventListener('click', function() {
+            const treatmentId = parseInt(this.dataset.treatmentId);
+            if (isNaN(treatmentId) || treatmentId <= 0) {
+                console.error('Invalid treatment ID:', this.dataset.treatmentId);
+                alert('Invalid treatment ID provided for editing.');
+                return;
+            }
+            editTreatment(treatmentId);
+        });
+
+        // Create delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'submit-btn';
+        deleteButton.textContent = 'Delete';
+        deleteButton.style.backgroundColor = '#e74c3c';
+        deleteButton.dataset.treatmentId = treatment.T_ID;
+        deleteButton.dataset.treatmentDesc = escapeHtml(treatment.T_Description);
+
+        // Attach event listener directly to the delete button
+        deleteButton.addEventListener('click', function() {
+            const treatmentId = parseInt(this.dataset.treatmentId);
+            if (isNaN(treatmentId) || treatmentId <= 0) {
+                console.error('Invalid treatment ID:', this.dataset.treatmentId);
+                alert('Invalid treatment ID provided for deletion.');
+                return;
+            }
+            deleteTreatment(treatmentId, this.dataset.treatmentDesc);
+        });
+
+        actionsCell.appendChild(editButton);
+        actionsCell.appendChild(deleteButton);
+        row.appendChild(idCell);
+        row.appendChild(descriptionCell);
+        row.appendChild(actionsCell);
 
         tableBody.appendChild(row);
     });
@@ -480,6 +543,13 @@ function renderTreatmentsTable(treatments) {
 
 // Function to edit a treatment
 async function editTreatment(treatmentId) {
+    // Validate treatmentId before making the API call
+    if (!treatmentId || treatmentId <= 0) {
+        console.error('Invalid treatment ID provided for editing:', treatmentId);
+        alert('Invalid treatment ID provided for editing.');
+        return;
+    }
+
     try {
         // Fetch current treatment data
         const response = await fetch(`/api/admin/treatments/${treatmentId}`, {
@@ -493,8 +563,9 @@ async function editTreatment(treatmentId) {
             throw new Error(`Failed to get treatment: ${response.status}`);
         }
 
-        const treatmentData = await response.json();
-        
+        const result = await response.json();
+        const treatmentData = result.treatment; // The treatment data is nested in the result
+
         // Create a modal with edit form
         const modal = createEditTreatmentModal(treatmentData);
         document.body.appendChild(modal);
@@ -536,52 +607,25 @@ async function deleteTreatment(treatmentId, description) {
 function createEditTreatmentModal(treatment) {
     const modal = document.createElement('div');
     modal.className = 'modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    `;
 
     modal.innerHTML = `
-        <div class="modal-content" style="
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        ">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h2>Edit Treatment: #${treatment.T_ID}</h2>
-                <button id="closeEditTreatmentModal" style="
-                    background: none;
-                    border: none;
-                    font-size: 24px;
-                    cursor: pointer;
-                    padding: 5px;
-                ">&times;</button>
+                <button id="closeEditTreatmentModal" class="close-modal-btn">&times;</button>
             </div>
-            
+
             <form id="editTreatmentForm">
                 <input type="hidden" id="editTreatmentId" value="${treatment.T_ID}">
-                
+
                 <div class="form-group">
                     <label for="editTreatmentDescription">Treatment Description</label>
                     <textarea id="editTreatmentDescription" rows="3" class="medium-textarea">${escapeHtml(treatment.T_Description)}</textarea>
                 </div>
-                
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
+
+                <div class="form-actions">
                     <button type="submit" class="submit-btn">Save Changes</button>
-                    <button type="button" id="cancelEditTreatment" class="submit-btn" style="background-color: #95a5a6;">Cancel</button>
+                    <button type="button" id="cancelEditTreatment" class="submit-btn cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>
@@ -658,17 +702,72 @@ function renderUsersTable(users) {
     users.forEach(user => {
         const row = document.createElement('tr');
 
-        row.innerHTML = `
-            <td>${escapeHtml(user.U_Username)}</td>
-            <td><span class="status-badge ${user.U_Role.toLowerCase()}">${escapeHtml(user.U_Role)}</span></td>
-            <td>${escapeHtml(user.U_FirstName) || 'N/A'}</td>
-            <td>${escapeHtml(user.U_LastName) || 'N/A'}</td>
-            <td>${escapeHtml(user.U_Email) || 'N/A'}</td>
-            <td>
-                <button class="submit-btn" onclick="editUser(${user.U_ID})" style="margin-right: 5px;">Edit</button>
-                <button class="submit-btn" style="background-color: #e74c3c;" onclick="deleteUser(${user.U_ID}, '${escapeHtml(user.U_Username)}')">Delete</button>
-            </td>
-        `;
+        // Create and populate table cells
+        const usernameCell = document.createElement('td');
+        usernameCell.textContent = escapeHtml(user.U_Username);
+
+        const roleCell = document.createElement('td');
+        const roleBadge = document.createElement('span');
+        roleBadge.className = `status-badge ${user.U_Role.toLowerCase()}`;
+        roleBadge.textContent = escapeHtml(user.U_Role);
+        roleCell.appendChild(roleBadge);
+
+        const firstNameCell = document.createElement('td');
+        firstNameCell.textContent = escapeHtml(user.U_FirstName) || 'N/A';
+
+        const lastNameCell = document.createElement('td');
+        lastNameCell.textContent = escapeHtml(user.U_LastName) || 'N/A';
+
+        const emailCell = document.createElement('td');
+        emailCell.textContent = escapeHtml(user.U_Email) || 'N/A';
+
+        const actionsCell = document.createElement('td');
+
+        // Create edit button
+        const editButton = document.createElement('button');
+        editButton.className = 'submit-btn';
+        editButton.textContent = 'Edit';
+        editButton.style.marginRight = '5px';
+        editButton.dataset.userId = user.U_ID;
+
+        // Attach event listener directly to the edit button
+        editButton.addEventListener('click', function() {
+            const userId = parseInt(this.dataset.userId);
+            if (isNaN(userId) || userId <= 0) {
+                console.error('Invalid user ID:', this.dataset.userId);
+                alert('Invalid user ID provided for editing.');
+                return;
+            }
+            editUser(userId);
+        });
+
+        // Create delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'submit-btn';
+        deleteButton.textContent = 'Delete';
+        deleteButton.style.backgroundColor = '#e74c3c';
+        deleteButton.dataset.userId = user.U_ID;
+        deleteButton.dataset.username = escapeHtml(user.U_Username);
+
+        // Attach event listener directly to the delete button
+        deleteButton.addEventListener('click', function() {
+            const userId = parseInt(this.dataset.userId);
+            if (isNaN(userId) || userId <= 0) {
+                console.error('Invalid user ID:', this.dataset.userId);
+                alert('Invalid user ID provided for deletion.');
+                return;
+            }
+            deleteUser(userId, this.dataset.username);
+        });
+
+        actionsCell.appendChild(editButton);
+        actionsCell.appendChild(deleteButton);
+        row.appendChild(usernameCell);
+        row.appendChild(roleCell);
+        row.appendChild(firstNameCell);
+        row.appendChild(lastNameCell);
+        row.appendChild(emailCell);
+        row.appendChild(actionsCell);
 
         tableBody.appendChild(row);
     });
@@ -676,6 +775,13 @@ function renderUsersTable(users) {
 
 // Function to edit a user
 async function editUser(userId) {
+    // Validate userId before making the API call
+    if (!userId || userId <= 0) {
+        console.error('Invalid user ID provided for editing:', userId);
+        alert('Invalid user ID provided for editing.');
+        return;
+    }
+
     try {
         const response = await fetch(`/api/admin/users/${userId}`, {
             method: 'GET',
@@ -688,8 +794,9 @@ async function editUser(userId) {
             throw new Error(`Failed to get user: ${response.status}`);
         }
 
-        const userData = await response.json();
-        
+        const result = await response.json();
+        const userData = result.user;  // The user data is nested in the result
+
         // Create a modal with edit form
         const modal = createEditUserModal(userData);
         document.body.appendChild(modal);
@@ -731,49 +838,22 @@ async function deleteUser(userId, username) {
 function createEditUserModal(userData) {
     const modal = document.createElement('div');
     modal.className = 'modal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    `;
 
     modal.innerHTML = `
-        <div class="modal-content" style="
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        ">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div class="modal-content">
+            <div class="modal-header">
                 <h2>Edit User: ${escapeHtml(userData.U_Username)}</h2>
-                <button id="closeEditUserModal" style="
-                    background: none;
-                    border: none;
-                    font-size: 24px;
-                    cursor: pointer;
-                    padding: 5px;
-                ">&times;</button>
+                <button id="closeEditUserModal" class="close-modal-btn">&times;</button>
             </div>
-            
+
             <form id="editUserForm">
                 <input type="hidden" id="editUserId" value="${userData.U_ID}">
-                
+
                 <div class="form-group">
                     <label for="editUsername">Username</label>
                     <input type="text" id="editUsername" value="${escapeHtml(userData.U_Username)}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editRole">Role</label>
                     <select id="editRole">
@@ -782,25 +862,25 @@ function createEditUserModal(userData) {
                         <option value="Student" ${userData.U_Role === 'Student' ? 'selected' : ''}>Student</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editFirstName">First Name</label>
                     <input type="text" id="editFirstName" value="${escapeHtml(userData.U_FirstName) || ''}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editLastName">Last Name</label>
                     <input type="text" id="editLastName" value="${escapeHtml(userData.U_LastName) || ''}">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="editEmail">Email</label>
                     <input type="email" id="editEmail" value="${escapeHtml(userData.U_Email) || ''}">
                 </div>
-                
-                <div style="margin-top: 20px; display: flex; gap: 10px;">
+
+                <div class="form-actions">
                     <button type="submit" class="submit-btn">Save Changes</button>
-                    <button type="button" id="cancelEditUser" class="submit-btn" style="background-color: #95a5a6;">Cancel</button>
+                    <button type="button" id="cancelEditUser" class="submit-btn cancel-btn">Cancel</button>
                 </div>
             </form>
         </div>
@@ -882,15 +962,6 @@ function displayErrorMessage(message) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.textContent = message;
-    errorDiv.style.cssText = `
-        background-color: #f8d7da;
-        color: #721c24;
-        padding: 10px;
-        border: 1px solid #f5c6cb;
-        border-radius: 4px;
-        margin: 10px 0;
-        text-align: center;
-    `;
 
     // Insert after the form-section
     const formSection = document.querySelector('.form-section');

@@ -100,9 +100,53 @@ The application uses SQLite with the following tables:
 - Passwords hashed with bcrypt
 - JWT tokens with 1-day expiry stored in httpOnly cookies
 - Helmet middleware for hardened HTTP headers
+- Content Security Policy (CSP) with strict directives to prevent XSS attacks
 - CORS enabled with proper configuration
 - Secrets stored in `.env` file
 - Server-side validation using authenticated user ID from token
+
+## Content Security Policy (CSP) Compliance Guidelines
+
+The application implements a strict Content Security Policy via Helmet to prevent XSS attacks. When developing features, please follow these guidelines:
+
+### CSP Directives
+- `script-src-attr 'none'`: Prohibits inline event handlers (onclick, onchange, etc.)
+- `script-src 'self'`: Only allows scripts from the same origin
+- `style-src 'self' 'unsafe-inline'`: Allows styles from same origin and inline styles
+- All other directives follow Helmet's default secure policies
+
+### Proper Coding Practices for CSP Compliance
+
+1. **Avoid inline JavaScript**:
+   - ❌ Don't use `onclick="functionName()"` in HTML
+   - ❌ Don't embed JavaScript directly in HTML attributes
+   - ✅ Use `addEventListener` to attach event handlers in JavaScript files
+
+2. **Dynamic Content Creation**:
+   - ❌ Don't use `innerHTML` with string templates containing event handlers
+   - ✅ Create elements programmatically using `document.createElement()`
+   - ✅ Attach event listeners directly to created elements using `addEventListener()`
+
+3. **Event Handling**:
+   - ❌ Don't use inline event handlers in dynamically generated HTML
+   - ✅ Create DOM elements and attach event listeners programmatically
+   - ✅ Use direct event attachment rather than event delegation when possible
+
+### Example of CSP-Compliant Code:
+
+```javascript
+// ✅ Correct: Create element and attach event listener programmatically
+const button = document.createElement('button');
+button.textContent = 'Click me';
+button.addEventListener('click', function() {
+    // Handle click
+});
+tableCell.appendChild(button);
+
+// ❌ Incorrect: Using innerHTML with inline event handler
+const row = document.createElement('tr');
+row.innerHTML = '<td><button onclick="handleClick()">Click me</button></td>';
+```
 
 ## Key Endpoints
 
@@ -168,6 +212,13 @@ The application uses SQLite with the following tables:
 - Responsive UI with modern CSS styling
 - Modal-based data viewing with toggles for treatments
 - Proper error handling and user feedback
+- CSP-compliant JavaScript with proper element creation and event handling
+- Admin dashboard with navigation bar removed to avoid duplication with tabs
+- Complete API endpoint for retrieving individual treatment information
+- Enhanced validation and error handling for all edit operations
+- Improved data format consistency between API calls and UI components
+- Fixed patient age column display in admin dashboard (added age field to doctor patients endpoint)
+- Improved CSP compliance by replacing inline CSS with CSS classes in modal creation functions
 
 ### Planned Enhancements
 - Doctor dashboard with wellness trend charts

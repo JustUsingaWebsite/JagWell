@@ -297,6 +297,43 @@ router.delete('/users/:id', authenticateToken, adminOnly, (req, res) => {
     });
 });
 
+// GET /api/admin/patients/:id - Get a single patient by ID
+router.get('/patients/:id', authenticateToken, adminOnly, (req, res) => {
+    const patientId = parseInt(req.params.id);
+
+    // Validate patient ID
+    if (!patientId || patientId <= 0) {
+        return res.status(400).json({ error: 'Valid patient ID is required' });
+    }
+
+    const db = new sqlite3.Database(dbPath);
+
+    const query = `
+        SELECT P_ID, P_StudentId, P_Name, P_Age, P_DOB, P_Sex, P_Ethnicity, P_Phone, P_BloodType, P_Status
+        FROM PATIENT
+        WHERE P_ID = ?
+    `;
+
+    db.get(query, [patientId], (err, patient) => {
+        if (err) {
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            db.close();
+            return;
+        }
+
+        if (!patient) {
+            res.status(404).json({ error: 'Patient not found' });
+            db.close();
+            return;
+        }
+
+        res.json({ patient });
+
+        db.close();
+    });
+});
+
 // PUT /api/admin/patients/:id - Update patient information (excluding ID)
 router.put('/patients/:id', authenticateToken, adminOnly, (req, res) => {
     const patientId = parseInt(req.params.id);
@@ -483,6 +520,43 @@ router.put('/wellness/:id', authenticateToken, adminOnly, (req, res) => {
         }
 
         res.json({ message: 'Wellness record updated successfully' });
+
+        db.close();
+    });
+});
+
+// GET /api/admin/treatments/:id - Get a single treatment by ID
+router.get('/treatments/:id', authenticateToken, adminOnly, (req, res) => {
+    const treatmentId = parseInt(req.params.id);
+
+    // Validate treatment ID
+    if (!treatmentId || treatmentId <= 0) {
+        return res.status(400).json({ error: 'Valid treatment ID is required' });
+    }
+
+    const db = new sqlite3.Database(dbPath);
+
+    const query = `
+        SELECT T_ID, T_Description
+        FROM TREATMENT
+        WHERE T_ID = ?
+    `;
+
+    db.get(query, [treatmentId], (err, treatment) => {
+        if (err) {
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            db.close();
+            return;
+        }
+
+        if (!treatment) {
+            res.status(404).json({ error: 'Treatment not found' });
+            db.close();
+            return;
+        }
+
+        res.json({ treatment });
 
         db.close();
     });

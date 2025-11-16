@@ -28,6 +28,7 @@ router.get('/patients', authenticateToken, async (req, res) => {
                 p.P_ID as patientId,
                 p.P_Name as name,
                 p.P_StudentId as studentId,
+                p.P_Age as age,
                 p.P_Status as status,
                 wr.Record_Date as lastVisitDate
             FROM PATIENT p
@@ -145,6 +146,7 @@ router.get('/patients', authenticateToken, async (req, res) => {
                     patientId: patient.patientId,
                     name: patient.name,
                     studentId: patient.studentId,
+                    age: patient.age,
                     id: `P${String(patient.patientId).padStart(3, '0')}`, // Format ID as P001, P002, etc.
                     status: patient.status,
                     lastVisitDate: patient.lastVisitDate ? new Date(patient.lastVisitDate).toISOString() : null
