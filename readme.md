@@ -11,12 +11,12 @@
 
 For comprehensive documentation, please visit our [Documentation Site](https://justusingawebsite.github.io/JagWell/):
 
-- [Getting Started Guide](https://rosalind11.github.io/JagWell/)
-- [Admin User Guide](https://rosalind11.github.io/JagWell/admin-guide.html)
-- [Doctor User Guide](https://rosalind11.github.io/JagWell/doctor-guide.html)
-- [Student User Guide](https://rosalind11.github.io/JagWell/student-guide.html)
-- [API Reference](https://rosalind11.github.io/JagWell/api-reference.html)
-- [Security Guidelines](https://rosalind11.github.io/JagWell/security-guide.html)
+- [Getting Started Guide](https://justusingawebsite.github.io/JagWell/)
+- [Admin User Guide](https://justusingawebsite.github.io/JagWell/admin-guide.html)
+- [Doctor User Guide](https://justusingawebsite.github.io/JagWell/doctor-guide.html)
+- [Student User Guide](https://justusingawebsite.github.io/JagWell/student-guide.html)
+- [API Reference](https://justusingawebsite.github.io/JagWell/api-reference.html)
+- [Security Guidelines](https://justusingawebsite.github.io/JagWell/security-guide.html)
 
 ---
 
