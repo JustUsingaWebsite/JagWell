@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JagWell Wellness App - Documentation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="pictures/logo.png" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>JagWell Wellness App Documentation</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#setup">Setup</a></li>
+          <li><a href="#user-guides">User Guides</a></li>
+          <li><a href="#api">API Documentation</a></li>
+          <li><a href="#security">Security</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="overview" class="section">
+        <h2>Overview</h2>
+        <p>JagWell is a lightweight, secure wellness tracking application built with Node.js, Express, and SQLite. It helps users log and monitor their daily wellness habits with privacy and security in mind, designed specifically for student wellness tracking at educational institutions.</p>
+        
+        <div class="tech-stack">
+          <h3>Tech Stack</h3>
+          <ul>
+            <li><strong>Backend</strong>: Node.js + Express</li>
+            <li><strong>Database</strong>: SQLite</li>
+            <li><strong>Authentication</strong>: JWT + bcrypt for password hashing</li>
+            <li><strong>Security</strong>: Helmet, CORS, environment variables</li>
+            <li><strong>Frontend</strong>: HTML, CSS, JavaScript</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <h2>Features</h2>
+        <ul class="feature-list">
+          <li><strong>Multi-role system</strong>: Supports Admin, Doctor, and Student user roles with appropriate permissions</li>
+          <li><strong>Wellness tracking</strong>: Students can log daily wellness data (mood, sleep, heart rate, etc.)</li>
+          <li><strong>Medical oversight</strong>: Doctors can view anonymous wellness trends and add medical data</li>
+          <li><strong>Student ID integration</strong>: Doctors can associate school-generated student IDs with patient records for linking to school records</li>
+          <li><strong>Secure authentication</strong>: JWT-based authentication with bcrypt password hashing</li>
+          <li><strong>Data privacy</strong>: All sensitive data stored locally in SQLite database</li>
+        </ul>
+      </section>
+
+      <section id="setup" class="section">
+        <h2>Setup Instructions</h2>
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>Node.js installed</li>
+          <li>SQLite CLI (for Windows users: <code>winget install SQLite.SQLite</code>)</li>
+        </ul>
+
+        <h3>Installation Steps</h3>
+        <ol>
+          <li>Install dependencies: <code>npm install</code></li>
+          <li>Create database: <code>sqlite3 db/jagwell.db < jagwell.sql</code></li>
+          <li>Create first user: <code>node scripts/create-user.js</code></li>
+          <li>Configure environment in <code>.env</code> file:
+            <pre><code>PORT=3000
+JWT_SECRET=jagwell-secret-2025-do-not-use-in-prod</code></pre>
+          </li>
+          <li>Start the app: <code>npm run dev</code></li>
+        </ol>
+      </section>
+
+      <section id="user-guides" class="section">
+        <h2>User Guides</h2>
+        <div class="user-guides">
+          <div class="guide-card">
+            <h3>Admin Guide</h3>
+            <p>Learn how to manage users, patients, and wellness records as an administrator.</p>
+            <a href="admin-guide.html" class="btn">View Guide</a>
+          </div>
+          
+          <div class="guide-card">
+            <h3>Doctor Guide</h3>
+            <p>Instructions for doctors on patient management, wellness logging, and treatment tracking.</p>
+            <a href="doctor-guide.html" class="btn">View Guide</a>
+          </div>
+          
+          <div class="guide-card">
+            <h3>Student Guide</h3>
+            <p>How students can log their wellness information and access their health records.</p>
+            <a href="student-guide.html" class="btn">View Guide</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="api" class="section">
+        <h2>API Documentation</h2>
+        <p>The JagWell app provides a comprehensive API for managing wellness data:</p>
+        <ul>
+          <li><strong>Authentication API</strong>: Login, logout, and user information retrieval</li>
+          <li><strong>Doctor API</strong>: Patient management, wellness records, and treatment tracking</li>
+          <li><strong>Admin API</strong>: User and data management capabilities</li>
+        </ul>
+        <a href="api-reference.html" class="btn">View Full API Reference</a>
+      </section>
+
+      <section id="security" class="section">
+        <h2>Security Features</h2>
+        <p>JagWell implements multiple layers of security to protect user data and maintain privacy:</p>
+        <ul>
+          <li>Passwords hashed with bcrypt</li>
+          <li>JWT tokens with 1-day expiry stored in httpOnly cookies</li>
+          <li>Helmet middleware for hardened HTTP headers</li>
+          <li>Content Security Policy (CSP) with strict directives to prevent XSS attacks</li>
+          <li>CORS enabled with proper configuration</li>
+          <li>Secrets stored in <code>.env</code> file</li>
+          <li>Server-side validation using authenticated user ID from token</li>
+        </ul>
+        <a href="security-guide.html" class="btn">View Detailed Security Guide</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 JagWell Wellness App. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

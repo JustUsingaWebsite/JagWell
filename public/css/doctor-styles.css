@@ -297,6 +297,45 @@ body::before {
   font-weight: 500;
   color: #4a00e0;
   margin-bottom: 15px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.section-title .collapse-icon {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.section-title.collapsed .collapse-icon {
+  transform: rotate(-90deg);
+}
+
+.collapse-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  max-height: 1000px;
+}
+
+.collapse-content.collapsed {
+  max-height: 0;
+}
+
+/* Ensure proper collapsing of form elements */
+.collapse-content .flex-row,
+.collapse-content .form-group {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.collapse-content.collapsed .flex-row,
+.collapse-content.collapsed .form-group {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .flex-row {

@@ -11,16 +11,69 @@ function initializePage() {
     setupEventListeners();
     loadDropdownData();
     setDoctorIdFromServer();
+
+    // Set current date and time as default for the date field
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+        const now = new Date();
+        // Format to 'YYYY-MM-DDTHH:mm' for datetime-local input using local time
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+        dateInput.value = formattedDate;
+    }
+
+    // Check if we're on mobile and collapse sections by default
+    if (window.innerWidth <= 768) {
+        collapseAllSections();
+    }
+
+    // Add event listeners to section titles for collapsible functionality
+    addSectionCollapseEventListeners();
+}
+
+// Add event listeners to section titles for collapsible functionality
+function addSectionCollapseEventListeners() {
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(title => {
+        title.addEventListener('click', function() {
+            toggleCollapse(this);
+        });
+    });
+}
+
+// Collapse all sections (useful for mobile view)
+function collapseAllSections() {
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(title => {
+        if (!title.classList.contains('collapsed')) {
+            toggleCollapse(title);
+        }
+    });
+}
+
+// Expand all sections
+function expandAllSections() {
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(title => {
+        if (title.classList.contains('collapsed')) {
+            toggleCollapse(title);
+        }
+    });
 }
 
 // Set up all event listeners
 function setupEventListeners() {
     // Tab switching functionality
     setupTabSwitching();
-    
+
     // Form submission handling
     setupFormSubmissions();
-    
+
     // Add event listener to patient dropdown to populate records dropdown
     const patientIdSelect = document.getElementById('patientId');
     if (patientIdSelect) {
@@ -28,6 +81,15 @@ function setupEventListeners() {
             loadPatientRecords(this.value);
         });
     }
+
+    // Add resize event listener to handle mobile/desktop view changes
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+            collapseAllSections();
+        } else {
+            expandAllSections();
+        }
+    });
 }
 
 // Set up tab switching functionality
@@ -123,7 +185,7 @@ async function handleWellnessRecordSubmit(event) {
     
     const formData = {
         patientId: document.getElementById('patientId').value,
-        date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
+        date: document.getElementById('date').value || new Date().toISOString().slice(0, 16),
         heartRate: document.getElementById('heartRate').value,
         temperature: document.getElementById('temperature').value,
         pulse: document.getElementById('pulse').value,
@@ -326,17 +388,28 @@ async function loadPatientRecords(patientId) {
 function populateRecordsDropdown(records) {
     const recordIdSelect = document.getElementById('recordId');
     if (!recordIdSelect) return;
-    
+
     recordIdSelect.innerHTML = '<option value="">-- Select Record --</option>';
-    
+
     records.forEach(record => {
         const option = document.createElement('option');
         // Format the date for display
         const recordDate = record.recordDate ? new Date(record.recordDate).toLocaleDateString() : 'Unknown Date';
+        const complaint = record.complaint || 'No complaint';
         option.value = record.recordId;
-        option.textContent = `Record #${record.recordId} (${recordDate})`;
+        option.textContent = `Record #${record.recordId} (${recordDate}) - ${complaint}`;
         recordIdSelect.appendChild(option);
     });
+}
+
+// Toggle collapse/expand for form sections
+function toggleCollapse(element) {
+    const sectionTitle = element;
+    const collapseIcon = sectionTitle.querySelector('.collapse-icon');
+    const collapseContent = sectionTitle.nextElementSibling;
+
+    sectionTitle.classList.toggle('collapsed');
+    collapseContent.classList.toggle('collapsed');
 }
 
 // Function to get user ID from server using authenticated endpoint

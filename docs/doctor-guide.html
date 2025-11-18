@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Guide - JagWell Documentation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="../pictures/logo.png" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <img src="../pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>Doctor Guide - JagWell Documentation</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="admin-guide.html">Admin Guide</a></li>
+          <li><a href="doctor-guide.html">Doctor Guide</a></li>
+          <li><a href="student-guide.html">Student Guide</a></li>
+          <li><a href="api-reference.html">API Reference</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section">
+        <h2>Doctor Dashboard Overview</h2>
+        <p>The Doctor Dashboard provides healthcare professionals with tools to manage patients, log wellness records, and track treatments.</p>
+      </section>
+
+      <section class="section">
+        <h2>Patient Management</h2>
+        <p>Doctors can manage patient records, including demographic information and medical history.</p>
+        
+        <h3>Adding a New Patient</h3>
+        <ol>
+          <li>Click on the "Logging" tab in the top navigation</li>
+          <li>Click on the "New Patient" tab in the form area</li>
+          <li>Fill in the patient information including name, contact details, and demographics</li>
+          <li>Enter the school-generated Student ID if applicable</li>
+          <li>Click "Register Patient"</li>
+        </ol>
+        
+        <h3>Viewing and Searching Patients</h3>
+        <p>Go to the "Patients" page to view all patients, search by name or ID, and sort by different criteria.</p>
+        
+        <h3>Managing Patient Records</h3>
+        <p>On the Patients page, you can search, sort, and filter patient records. Click on a patient to view their wellness history.</p>
+      </section>
+
+      <section class="section">
+        <h2>Wellness Record Logging</h2>
+        <p>Doctors can log wellness records with both student-reported and doctor-added information.</p>
+        
+        <h3>Logging a New Wellness Record</h3>
+        <ol>
+          <li>Go to the "Logging" page from the top navigation</li>
+          <li>Click on the "Wellness Record" tab</li>
+          <li>Select the patient from the dropdown</li>
+          <li>Enter the date and time (defaults to current time)</li>
+          <li>Fill in the physical measurements (heart rate, temperature, pulse, etc.)</li>
+          <li>Enter any student-reported data if available</li>
+          <li>Document doctor notes including complaints, follow-up dates, and referrals</li>
+          <li>Click "Log Wellness Record"</li>
+        </ol>
+        
+        <h3>Viewing Patient Wellness History</h3>
+        <p>On the Patients page, click on a patient to view their complete wellness history and trends.</p>
+      </section>
+
+      <section class="section">
+        <h2>Treatment Management</h2>
+        <p>Doctors can add new treatments and apply them to specific wellness records.</p>
+        
+        <h3>Adding a New Treatment</h3>
+        <ol>
+          <li>Go to the "Logging" page from the top navigation</li>
+          <li>Click on the "Treatment" tab</li>
+          <li>Enter the treatment description and category</li>
+          <li>Click "Add Treatment"</li>
+        </ol>
+        
+        <h3>Applying a Treatment to a Record</h3>
+        <ol>
+          <li>Go to the "Logging" page from the top navigation</li>
+          <li>Click on the "Record Treatment" tab</li>
+          <li>Select the wellness record from the dropdown (shows patient, date, and complaint)</li>
+          <li>Select the treatment from the dropdown</li>
+          <li>Add specific details about the treatment application</li>
+          <li>Set start and end dates if applicable</li>
+          <li>Click "Apply Treatment"</li>
+        </ol>
+      </section>
+
+      <section class="section">
+        <h2>Statistics and Trends</h2>
+        <p>Access anonymized wellness trends and statistics on the "Stats" page.</p>
+        
+        <h3>Viewing Wellness Trends</h3>
+        <p>On the Stats page, view trends in common complaints, mood patterns, sleep patterns, and other wellness metrics across all patients.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 JagWell Wellness App. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

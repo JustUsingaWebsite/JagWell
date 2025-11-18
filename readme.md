@@ -1,11 +1,22 @@
-# Jagwell - Wellness App 🌿  
-<img src="./public/pictures/logo.png" alt="Stoway Logo" width="120" align = "left" style="margin-right:15px"/> 
+# Jagwell - Wellness App 🌿
+<img src="./public/pictures/logo.png" alt="Stoway Logo" width="120" align = "left" style="margin-right:15px"/>
 
 <div style="display: flex; flex-direction: column; gap: 2px;">
 <p> <strong>Jagwell Wellness App.</strong> A lightweight, secure wellness tracking application built with Node.js, Express, and SQLite. Designed to help users log and monitor their daily wellness habits—mindfully and privately.. Please consider going to the <a href="https://github.com/JustUsingaWebsite/JagWell/releases">latest release</a> and downloading it there if you want a view at a basic set up.</p>
 </div>
 
 <br>
+
+## Documentation
+
+For comprehensive documentation, please visit our [Documentation Site](https://justusingawebsite.github.io/JagWell/):
+
+- [Getting Started Guide](https://rosalind11.github.io/JagWell/)
+- [Admin User Guide](https://rosalind11.github.io/JagWell/admin-guide.html)
+- [Doctor User Guide](https://rosalind11.github.io/JagWell/doctor-guide.html)
+- [Student User Guide](https://rosalind11.github.io/JagWell/student-guide.html)
+- [API Reference](https://rosalind11.github.io/JagWell/api-reference.html)
+- [Security Guidelines](https://rosalind11.github.io/JagWell/security-guide.html)
 
 ---
 

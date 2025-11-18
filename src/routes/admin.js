@@ -422,12 +422,66 @@ router.put('/patients/:id', authenticateToken, adminOnly, (req, res) => {
     });
 });
 
+// GET /api/admin/wellness/:id - Get a single wellness record by ID
+router.get('/wellness/:id', authenticateToken, adminOnly, (req, res) => {
+    const recordId = parseInt(req.params.id);
+
+    // Validate record ID
+    if (isNaN(recordId) || recordId <= 0) {
+        return res.status(400).json({ error: 'Valid record ID is required' });
+    }
+
+    const db = new sqlite3.Database(dbPath);
+
+    // Query to get wellness record with patient and user information
+    const query = `
+        SELECT
+            wr.Record_ID,
+            wr.Record_Date,
+            wr.Sleep_Hours,
+            wr.Study_Hours,
+            wr.Exercise_Minutes,
+            wr.Mood,
+            wr.Heart_Rate,
+            wr.Temperature,
+            wr.Pulse,
+            wr.Complaint,
+            wr.Follow_Up_Date,
+            wr.Referral_To,
+            wr.Program_Code,
+            wr.Comments,
+            wr.P_ID,
+            wr.U_ID
+        FROM WELLNESS_RECORD wr
+        WHERE wr.Record_ID = ?
+    `;
+
+    db.get(query, [recordId], (err, record) => {
+        if (err) {
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            db.close();
+            return;
+        }
+
+        if (!record) {
+            res.status(404).json({ error: 'Wellness record not found' });
+            db.close();
+            return;
+        }
+
+        res.json({ record });
+
+        db.close();
+    });
+});
+
 // PUT /api/admin/wellness/:id - Update wellness record (excluding key IDs)
 router.put('/wellness/:id', authenticateToken, adminOnly, (req, res) => {
     const recordId = parseInt(req.params.id);
     const {
-        date, sleepHours, studyHours, exerciseMinutes, mood, 
-        heartRate, temperature, pulse, complaint, followUpDate, 
+        date, sleepHours, studyHours, exerciseMinutes, mood,
+        heartRate, temperature, pulse, complaint, followUpDate,
         referralTo, programCode, comments
     } = req.body;
 
@@ -648,6 +702,45 @@ router.delete('/treatments/:id', authenticateToken, adminOnly, (req, res) => {
 
             db.close();
         });
+    });
+});
+
+// GET /api/admin/wellness - Get all wellness records with optional search
+router.get('/wellness', authenticateToken, adminOnly, (req, res) => {
+    const { search = '' } = req.query;
+    const db = new sqlite3.Database(dbPath);
+
+    // Query to get wellness records with patient and user information
+    let query = `
+        SELECT
+            wr.Record_ID,
+            wr.Record_Date,
+            p.P_Name as PatientName,
+            u.U_Username as RecordedBy
+        FROM WELLNESS_RECORD wr
+        JOIN PATIENT p ON wr.P_ID = p.P_ID
+        JOIN USER u ON wr.U_ID = u.U_ID
+    `;
+
+    const params = [];
+    if (search) {
+        query += ` WHERE p.P_Name LIKE ? OR wr.Record_Date LIKE ?`;
+        params.push(`%${search}%`, `%${search}%`);
+    }
+
+    query += ` ORDER BY wr.Record_Date DESC`;
+
+    db.all(query, params, (err, records) => {
+        if (err) {
+            console.error('Database error:', err.message);
+            res.status(500).json({ error: 'Database error' });
+            db.close();
+            return;
+        }
+
+        res.json({ records });
+
+        db.close();
     });
 });
 

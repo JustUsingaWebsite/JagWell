@@ -430,13 +430,19 @@ async function handleEditPatientSubmit(event) {
 // Load wellness records from the API
 async function loadRecords(searchTerm = '') {
     try {
-        // This would need a new API endpoint for admin to list all records
-        // For now, we'll simulate by not loading anything
-        
-        const tableBody = document.getElementById('recordsTableBody');
-        if (tableBody) {
-            tableBody.innerHTML = '<tr><td colspan="5">Records loading functionality will be implemented via API endpoint.</td></tr>';
+        const response = await fetch(`/api/admin/wellness?search=${encodeURIComponent(searchTerm)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to load records: ${response.status}`);
         }
+
+        const data = await response.json();
+        renderRecordsTable(data.records);
     } catch (error) {
         console.error('Error loading records:', error);
         displayErrorMessage('Failed to load records. Please try again.');
@@ -773,6 +779,72 @@ function renderUsersTable(users) {
     });
 }
 
+// Render wellness records table with data
+function renderRecordsTable(records) {
+    const tableBody = document.getElementById('recordsTableBody');
+    if (!tableBody) {
+        console.error('Records table body element not found');
+        return;
+    }
+
+    if (!records || records.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5">No wellness records found.</td></tr>';
+        return;
+    }
+
+    // Clear the table
+    tableBody.innerHTML = '';
+
+    // Add each record as a table row
+    records.forEach(record => {
+        const row = document.createElement('tr');
+
+        // Create and populate table cells
+        const idCell = document.createElement('td');
+        idCell.textContent = record.Record_ID;
+
+        const patientNameCell = document.createElement('td');
+        patientNameCell.textContent = escapeHtml(record.PatientName);
+
+        const dateCell = document.createElement('td');
+        // Format the date to a more readable format
+        const formattedDate = new Date(record.Record_Date).toLocaleString();
+        dateCell.textContent = formattedDate;
+
+        const recordedByCell = document.createElement('td');
+        recordedByCell.textContent = escapeHtml(record.RecordedBy);
+
+        const actionsCell = document.createElement('td');
+
+        // Create edit button
+        const editButton = document.createElement('button');
+        editButton.className = 'submit-btn';
+        editButton.textContent = 'Edit';
+        editButton.style.marginRight = '5px';
+        editButton.dataset.recordId = record.Record_ID;
+
+        // Attach event listener directly to the edit button
+        editButton.addEventListener('click', function() {
+            const recordId = parseInt(this.dataset.recordId);
+            if (isNaN(recordId) || recordId <= 0) {
+                console.error('Invalid record ID:', this.dataset.recordId);
+                alert('Invalid record ID provided for editing.');
+                return;
+            }
+            editWellnessRecord(recordId);
+        });
+
+        actionsCell.appendChild(editButton);
+        row.appendChild(idCell);
+        row.appendChild(patientNameCell);
+        row.appendChild(dateCell);
+        row.appendChild(recordedByCell);
+        row.appendChild(actionsCell);
+
+        tableBody.appendChild(row);
+    });
+}
+
 // Function to edit a user
 async function editUser(userId) {
     // Validate userId before making the API call
@@ -954,6 +1026,235 @@ function escapeHtml(text) {
         "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+// Function to edit a wellness record
+async function editWellnessRecord(recordId) {
+    // Validate recordId before proceeding - ensure it's a valid positive integer
+    const parsedRecordId = parseInt(recordId, 10);
+    if (isNaN(parsedRecordId) || parsedRecordId <= 0 || !Number.isInteger(parsedRecordId)) {
+        console.error('Invalid record ID provided for editing:', recordId, 'Parsed as:', parsedRecordId);
+        alert(`Invalid record ID provided for editing: ${recordId}`);
+        return;
+    }
+
+    try {
+        // Fetch existing record data from the server
+        const response = await fetch(`/api/admin/wellness/${parsedRecordId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                console.error('Wellness record not found:', parsedRecordId);
+                alert(`Wellness record with ID ${parsedRecordId} not found.`);
+            } else if (response.status === 403) {
+                console.error('Access denied when fetching wellness record:', parsedRecordId);
+                alert('Access denied. Please check your permissions.');
+            } else {
+                throw new Error(`Failed to get wellness record: ${response.status} - ${response.statusText}`);
+            }
+            return;
+        }
+
+        const result = await response.json();
+
+        const recordData = result.record;  // The record data is nested in the result
+        if (!recordData) {
+            console.error('No record data found in API response');
+            alert('No record data found in API response.');
+            return;
+        }
+
+        // Create a modal with edit form pre-populated with record data
+        createEditWellnessRecordModal(recordData);
+    } catch (error) {
+        console.error('Error fetching wellness record for editing:', error);
+        if (error.message.includes('Failed to fetch')) {
+            alert('Failed to connect to the server. Please check your network connection.');
+        } else {
+            alert(`Failed to fetch wellness record data for editing: ${error.message}`);
+        }
+    }
+}
+
+// Function to create edit wellness record modal
+function createEditWellnessRecordModal(recordData) {
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Wellness Record: #${recordData.Record_ID}</h2>
+                <button id="closeEditWellnessRecordModal" class="close-modal-btn">&times;</button>
+            </div>
+
+            <form id="editWellnessRecordForm">
+                <input type="hidden" id="editRecordId" value="${recordData.Record_ID}">
+
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="editRecordDate">Date</label>
+                        <input type="datetime-local" id="editRecordDate" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSleepHours">Sleep Hours</label>
+                        <input type="number" id="editSleepHours" step="0.1" min="0" max="24" value="${recordData.Sleep_Hours || ''}">
+                    </div>
+                </div>
+
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="editStudyHours">Study Hours</label>
+                        <input type="number" id="editStudyHours" step="0.1" min="0" value="${recordData.Study_Hours || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editExerciseMinutes">Exercise Minutes</label>
+                        <input type="number" id="editExerciseMinutes" min="0" value="${recordData.Exercise_Minutes || ''}">
+                    </div>
+                </div>
+
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="editMood">Mood</label>
+                        <input type="text" id="editMood" value="${escapeHtml(recordData.Mood) || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editHeartRate">Heart Rate</label>
+                        <input type="number" id="editHeartRate" min="0" value="${recordData.Heart_Rate || ''}">
+                    </div>
+                </div>
+
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="editTemperature">Temperature</label>
+                        <input type="number" id="editTemperature" step="0.1" min="0" value="${recordData.Temperature || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPulse">Pulse</label>
+                        <input type="number" id="editPulse" min="0" value="${recordData.Pulse || ''}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="editComplaint">Complaint</label>
+                    <input type="text" id="editComplaint" value="${escapeHtml(recordData.Complaint) || ''}">
+                </div>
+
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="editFollowUpDate">Follow Up Date</label>
+                        <input type="date" id="editFollowUpDate" value="${recordData.Follow_Up_Date || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editReferralTo">Referral To</label>
+                        <input type="text" id="editReferralTo" value="${escapeHtml(recordData.Referral_To || '') || ''}">
+                    </div>
+                </div>
+
+                <div class="flex-row">
+                    <div class="form-group">
+                        <label for="editProgramCode">Program Code</label>
+                        <input type="text" id="editProgramCode" value="${escapeHtml(recordData.Program_Code || '') || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPatientId">Patient ID</label>
+                        <input type="number" id="editPatientId" readonly value="${recordData.P_ID || ''}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="editComments">Comments</label>
+                    <textarea id="editComments" rows="3">${escapeHtml(recordData.Comments) || ''}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Save Changes</button>
+                    <button type="button" id="cancelEditWellnessRecord" class="submit-btn cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    // Add event listeners to the modal elements
+    const editWellnessRecordForm = modal.querySelector('#editWellnessRecordForm');
+    editWellnessRecordForm.addEventListener('submit', handleEditWellnessRecordSubmit);
+
+    const closeBtn = modal.querySelector('#closeEditWellnessRecordModal');
+    closeBtn.addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+
+    const cancelBtn = modal.querySelector('#cancelEditWellnessRecord');
+    cancelBtn.addEventListener('click', function() {
+        document.body.removeChild(modal);
+    });
+
+    // Add the modal to the document before setting date value
+    document.body.appendChild(modal);
+
+    // Format date to work with datetime-local input
+    if (recordData.Record_Date) {
+        const date = new Date(recordData.Record_Date);
+        // Format to 'YYYY-MM-DDTHH:mm' for datetime-local input
+        const formattedDate = date.toISOString().slice(0, 16);
+        const dateElement = document.getElementById('editRecordDate');
+        if (dateElement) {
+            dateElement.value = formattedDate;
+        }
+    }
+
+    return modal;
+}
+
+// Handle edit wellness record form submission
+async function handleEditWellnessRecordSubmit(event) {
+    event.preventDefault();
+
+    const formData = {
+        date: document.getElementById('editRecordDate').value,
+        sleepHours: parseFloat(document.getElementById('editSleepHours').value) || null,
+        studyHours: parseFloat(document.getElementById('editStudyHours').value) || null,
+        exerciseMinutes: parseInt(document.getElementById('editExerciseMinutes').value) || null,
+        mood: document.getElementById('editMood').value || null,
+        heartRate: parseFloat(document.getElementById('editHeartRate').value) || null,
+        temperature: parseFloat(document.getElementById('editTemperature').value) || null,
+        pulse: parseInt(document.getElementById('editPulse').value) || null,
+        complaint: document.getElementById('editComplaint').value || null,
+        followUpDate: document.getElementById('editFollowUpDate').value || null,
+        referralTo: document.getElementById('editReferralTo').value || null,
+        programCode: document.getElementById('editProgramCode').value || null,
+        comments: document.getElementById('editComments').value || null
+    };
+
+    const recordId = parseInt(document.getElementById('editRecordId').value);
+
+    try {
+        const response = await fetch(`/api/admin/wellness/${recordId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('Wellness record updated successfully!');
+            document.body.removeChild(document.querySelector('.modal'));
+            loadRecords(); // Refresh the records list
+        } else {
+            alert(`Error: ${result.error || 'Failed to update wellness record'}`);
+        }
+    } catch (error) {
+        console.error('Error updating wellness record:', error);
+        alert('An error occurred while updating the wellness record.');
+    }
 }
 
 // Display error message

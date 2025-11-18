@@ -209,6 +209,11 @@ row.innerHTML = '<td><button onclick="handleClick()">Click me</button></td>';
 - Patient information editing (excluding patient ID)
 - Wellness record editing (excluding critical IDs)
 - Treatment editing and constraint-checked deletion
+- Wellness records management in admin dashboard with full CRUD operations
+- Search functionality for wellness records in admin dashboard
+- Date and time logging for wellness records (instead of date only)
+- Collapsible form sections in doctor logging interface for better mobile experience
+- Complaint information displayed in record dropdown for easier identification
 - Responsive UI with modern CSS styling
 - Modal-based data viewing with toggles for treatments
 - Proper error handling and user feedback

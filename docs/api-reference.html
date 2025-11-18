@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference - JagWell Documentation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="pictures/logo.png" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <img src="pictures/logo.png" alt="JagWell Logo" class="logo">
+        <h1>API Reference - JagWell Documentation</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="admin-guide.html">Admin Guide</a></li>
+          <li><a href="doctor-guide.html">Doctor Guide</a></li>
+          <li><a href="student-guide.html">Student Guide</a></li>
+          <li><a href="api-reference.html">API Reference</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section">
+        <h2>API Overview</h2>
+        <p>The JagWell application provides a RESTful API for managing wellness data, patients, treatments, and user accounts. All API endpoints require authentication using JWT tokens.</p>
+      </section>
+
+      <section class="section">
+        <h2>Authentication API</h2>
+        
+        <div class="api-endpoint">
+          <h3>POST /api/auth/login</h3>
+          <p><strong>Description:</strong> Authenticate a user and return a JWT token</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "username": "string",
+  "password": "string"
+}</code></pre>
+          <p><strong>Response:</strong></p>
+          <pre><code>{
+  "token": "JWT token string",
+  "user": {
+    "id": number,
+    "username": "string",
+    "role": "string"
+  }
+}</code></pre>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>POST /api/auth/logout</h3>
+          <p><strong>Description:</strong> Logout the current user</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+          <p><strong>Response:</strong></p>
+          <pre><code>{
+  "message": "Logged out successfully"
+}</code></pre>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>GET /api/auth/me</h3>
+          <p><strong>Description:</strong> Get information about the current user</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+          <p><strong>Response:</strong></p>
+          <pre><code>{
+  "user": {
+    "id": number,
+    "username": "string",
+    "role": "string",
+    "firstName": "string",
+    "lastName": "string",
+    "email": "string"
+  }
+}</code></pre>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Doctor API Endpoints</h2>
+        
+        <div class="api-endpoint">
+          <h3>GET /api/doctor/patients</h3>
+          <p><strong>Description:</strong> Get list of patients with search, sort, and pagination</p>
+          <p><strong>Query Parameters:</strong></p>
+          <ul>
+            <li>search (optional): Search by patient name or ID</li>
+            <li>status (optional): Filter by patient status ('Student', 'Staff', or 'all')</li>
+            <li>sort (optional): Sort by 'name', 'id', or 'status' (default is 'name')</li>
+            <li>page (optional): Page number for pagination (default is 1)</li>
+            <li>limit (optional): Items per page (default is 10, max is 100)</li>
+          </ul>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>GET /api/doctor/patients/dropdown</h3>
+          <p><strong>Description:</strong> Get all patients for dropdown selection (includes Student ID)</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>GET /api/doctor/patient/:id/records</h3>
+          <p><strong>Description:</strong> Get all records for a specific patient</p>
+          <p><strong>Parameters:</strong> id (patient ID)</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>POST /api/doctor/patients</h3>
+          <p><strong>Description:</strong> Create new patient (includes optional Student ID field for school records)</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "firstName": "string",
+  "lastName": "string",
+  "email": "string",
+  "phone": "string",
+  "studentId": "string (optional)",
+  "age": "number",
+  "dob": "date string",
+  "sex": "string",
+  "ethnicity": "string",
+  "bloodType": "string",
+  "status": "string ('Student' or 'Staff')"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>POST /api/doctor/wellness</h3>
+          <p><strong>Description:</strong> Create new wellness record</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "patientId": "number",
+  "date": "datetime string (optional, defaults to now)",
+  "heartRate": "number (optional)",
+  "temperature": "number (optional)",
+  "pulse": "number (optional)",
+  "bloodPressure": "string (optional)",
+  "sleepHours": "number (optional)",
+  "studyHours": "number (optional)",
+  "exerciseMinutes": "number (optional)",
+  "mood": "string (optional)",
+  "complaint": "string (optional)",
+  "followUpDate": "date string (optional)",
+  "referralTo": "string (optional)",
+  "programCode": "string (optional)",
+  "comments": "string (optional)"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/doctor/wellness/:id</h3>
+          <p><strong>Description:</strong> Update wellness record</p>
+          <p><strong>Parameters:</strong> id (record ID)</p>
+          <p><strong>Request Body:</strong> Same as POST /api/doctor/wellness</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>GET /api/doctor/treatments</h3>
+          <p><strong>Description:</strong> Get all treatments for dropdown selection</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>POST /api/doctor/treatments</h3>
+          <p><strong>Description:</strong> Create new treatment</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "description": "string",
+  "category": "string (default is 'Treatment')"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/doctor/treatments/:id</h3>
+          <p><strong>Description:</strong> Update treatment</p>
+          <p><strong>Parameters:</strong> id (treatment ID)</p>
+          <p><strong>Request Body:</strong> Same as POST /api/doctor/treatments</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>POST /api/doctor/record-treatments</h3>
+          <p><strong>Description:</strong> Link treatment to wellness record</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "recordId": "number",
+  "treatmentId": "number",
+  "details": "string (optional)",
+  "startDate": "date string (optional)",
+  "endDate": "date string (optional)"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/doctor/record-treatments/:id</h3>
+          <p><strong>Description:</strong> Update record-treatment link</p>
+          <p><strong>Parameters:</strong> id (record-treatment ID)</p>
+          <p><strong>Request Body:</strong> Same as POST /api/doctor/record-treatments</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Admin API Endpoints</h2>
+        
+        <div class="api-endpoint">
+          <h3>GET /api/admin/users</h3>
+          <p><strong>Description:</strong> Get all users</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>GET /api/admin/users/:id</h3>
+          <p><strong>Description:</strong> Get a single user by ID</p>
+          <p><strong>Parameters:</strong> id (user ID)</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>POST /api/admin/users</h3>
+          <p><strong>Description:</strong> Create new user (admin only)</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "username": "string",
+  "password": "string",
+  "role": "string ('Admin', 'Doctor', or 'Student')",
+  "firstName": "string (optional)",
+  "lastName": "string (optional)",
+  "email": "string (optional)"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/admin/users/:id</h3>
+          <p><strong>Description:</strong> Update user information (excluding ID)</p>
+          <p><strong>Parameters:</strong> id (user ID)</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "username": "string (optional)",
+  "role": "string (optional)",
+  "firstName": "string (optional)",
+  "lastName": "string (optional)",
+  "email": "string (optional)"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>DELETE /api/admin/users/:id</h3>
+          <p><strong>Description:</strong> Delete user and reassign wellness records to system user (ID 0)</p>
+          <p><strong>Parameters:</strong> id (user ID)</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/admin/patients/:id</h3>
+          <p><strong>Description:</strong> Update patient information (excluding P_ID)</p>
+          <p><strong>Parameters:</strong> id (patient ID)</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "name": "string (optional)",
+  "studentId": "string (optional)",
+  "age": "number (optional)",
+  "dob": "date string (optional)",
+  "sex": "string (optional)",
+  "ethnicity": "string (optional)",
+  "phone": "string (optional)",
+  "bloodType": "string (optional)",
+  "status": "string (optional)"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/admin/wellness/:id</h3>
+          <p><strong>Description:</strong> Update wellness record (excluding Record_ID, U_ID, P_ID)</p>
+          <p><strong>Parameters:</strong> id (record ID)</p>
+          <p><strong>Request Body:</strong> Same as POST /api/doctor/wellness</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>PUT /api/admin/treatments/:id</h3>
+          <p><strong>Description:</strong> Update treatment description (excluding T_ID)</p>
+          <p><strong>Parameters:</strong> id (treatment ID)</p>
+          <p><strong>Request Body:</strong></p>
+          <pre><code>{
+  "description": "string"
+}</code></pre>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+
+        <div class="api-endpoint">
+          <h3>DELETE /api/admin/treatments/:id</h3>
+          <p><strong>Description:</strong> Delete treatment only if not referenced in RECORD_TREATMENT</p>
+          <p><strong>Parameters:</strong> id (treatment ID)</p>
+          <p><strong>Requires:</strong> Valid JWT token in Authorization header (Admin role required)</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 JagWell Wellness App. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

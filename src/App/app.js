@@ -54,9 +54,6 @@ require('./Doctor-Routes/doctor-page.routes')(app, authenticateToken, authorizeR
 require('./Admin-Routes/admin-page-routes')(app, authenticateToken, authorizeRoles, path);
 
 //-----------------------------------------------------------------------------------------//
-// API Routes — admin-specific //
-app.use('/api/admin', authenticateToken, require('../routes/admin'));
-//-----------------------------------------------------------------------------------------//
 
 
 //-----------------------------------------------------------------------------------------//
