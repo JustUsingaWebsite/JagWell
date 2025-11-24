@@ -144,5 +144,4 @@ We’re planning to add:
 
 ---
 
-> 💚 **Built with care for student wellness at Jaguar High.**  
-> Made by Rosal & team — because your health matters. 🌿
+> 💚 **Built with care for student wellness at University Of Belize.**  
