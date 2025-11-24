@@ -9,7 +9,7 @@ body {
  font-family: 'Poppins', sans-serif;
  line-height: 1.6;
  color: #333;
- background: white
+ background: #D8D2C2
  /*background-image: url('../assets/background.svg'); */
 }
 
@@ -21,7 +21,7 @@ body {
 
 /* Header Styles */
 header {
- background: linear-gradient(135deg, #4a00e0, #8e2de2);
+ background: linear-gradient(135deg, #B17457, #4A4947);
  color: white;
  padding: 20px 0;
  /* MODIFIED: Removed border-radius for a clean sticky look */
@@ -84,14 +84,14 @@ nav a.active {
 }
 
 .section h2 {
- color: #4a00e0;
+ color: #B17457;
  margin-bottom: 20px;
  padding-bottom: 10px;
  border-bottom: 2px solid #e0e0e0;
 }
 
 .section h3 {
- color: #8e2de2;
+ color: #4A4947;
  margin: 15px 0 10px;
 }
 
@@ -145,7 +145,7 @@ pre code {
 }
 
 .guide-card {
- background: #f8f9ff;
+ background: #FAF7F0;
  border: 1px solid #e0e0e0;
  border-radius: 8px;
  padding: 20px;
@@ -159,7 +159,7 @@ pre code {
 }
 
 .guide-card h3 {
-color: #4a00e0;
+color: #B17457;
 margin-top: 0;
 }
 
@@ -167,7 +167,7 @@ margin-top: 0;
  display: inline-block;
  margin-top: 15px;
  padding: 10px 20px;
- background: linear-gradient(135deg, #8e2de2, #4a00e0);
+ background: linear-gradient(135deg, #B17457, #4A4947);
  color: white;
  text-decoration: none;
  border-radius: 5px;
@@ -182,7 +182,7 @@ margin-top: 0;
 .btn {
  display: inline-block;
  padding: 10px 20px;
- background: linear-gradient(135deg, #8e2de2, #4a00e0);
+ background: linear-gradient(135deg, #4A4947, #B17457);
  color: white;
  text-decoration: none;
  border-radius: 5px;

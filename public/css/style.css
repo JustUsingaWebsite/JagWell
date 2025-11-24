@@ -99,7 +99,7 @@ body {
 .login-container {
   width: 100%;
   max-width: 420px;
-  background: rgba(255, 255, 255, 0.95);
+  background: #D8D2C2;
   backdrop-filter: blur(10px);
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -123,12 +123,12 @@ h1 {
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #4a00e0;
+  color: #B17457;
 }
 
 .subtitle {
   font-size: 15px;
-  color: #666;
+  color: #4A4947;
   margin-bottom: 24px;
 }
 
@@ -140,7 +140,7 @@ h1 {
 input {
   width: 100%;
   padding: 14px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #D8D2C2;
   border-radius: 12px;
   font-size: 16px;
   font-family: 'Poppins', sans-serif;
@@ -149,14 +149,14 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #8e2de2;
+  border-color: #B17457;
   box-shadow: 0 0 0 3px rgba(142, 45, 226, 0.2);
 }
 
 button {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #8e2de2, #4a00e0);
+  background: linear-gradient(135deg, #B17457, #4A4947);
   color: white;
   border: none;
   border-radius: 12px;

@@ -85,49 +85,5 @@
         </div>
       </div>
     </div>
-  <script>
-    document.getElementById('wellnessForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('Session expired. Please log in again.');
-        window.location.href = '/login.html';
-        return;
-      }
-
-      const data = {
-        Heart_Rate: parseFloat(document.getElementById('heartRate').value),
-        Temperature: parseFloat(document.getElementById('temperature').value),
-        Sleep_Hours: parseFloat(document.getElementById('sleepHours').value),
-        Study_Hours: parseFloat(document.getElementById('studyHours').value),
-        Exercise_Minutes: parseInt(document.getElementById('exerciseMinutes').value),
-        Mood: document.getElementById('mood').value,
-        Complaint: document.getElementById('complaint').value || ''
-      };
-
-      try {
-        const res = await fetch('/api/wellness', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(data)
-        });
-
-        const result = await res.json();
-
-        if (res.ok) {
-          alert('✅ Wellness data saved!');
-          document.getElementById('wellnessForm').reset();
-        } else {
-          alert(`❌ Error: ${result.error || 'Unknown error'}`);
-        }
-      } catch (err) {
-        alert('❌ Network error. Please try again.');
-      }
-    });
-  </script>
 </body>
 </html>
