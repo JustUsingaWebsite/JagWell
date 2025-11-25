@@ -144,4 +144,4 @@ We’re planning to add:
 
 ---
 
-> 💚 **Built with care for student wellness at University Of Belize.**  
+> 💚 **Built with care from the IT students at University Of Belize.**  
